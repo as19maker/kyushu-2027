@@ -707,12 +707,13 @@
       </div>
     </div>
 
-    <!-- ==================== 7. 記帳分攤分頁 (新增) ==================== -->
+        <!-- ==================== 7. 記帳分攤分頁 (靈活分攤版) ==================== -->
     <div id="view-accounting" class="main-view space-y-3.5 hidden">
+      
       <!-- 統計總覽卡片 -->
       <div class="bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-2xl p-4 shadow-sm">
         <div class="flex justify-between items-center text-xs opacity-80 mb-2">
-          <span>旅程總支出統計</span>
+          <span>旅程總支出與匯率</span>
           <span class="flex items-center gap-1">
             匯率 JPY: <input type="number" step="0.001" id="rateInput" value="0.22" onchange="updateAccountingUI()" class="w-14 bg-white/10 text-white text-center rounded px-1 py-0.5 border border-white/20 focus:outline-none">
           </span>
@@ -722,36 +723,100 @@
             <div class="text-2xl font-black tracking-tight" id="totalJpy">¥0</div>
             <div class="text-xs text-slate-300 mt-0.5" id="totalTwd">約 NT$ 0</div>
           </div>
-          <div class="text-right border-l border-white/10 pl-3">
-            <div class="text-[10px] text-slate-300">4 人均攤 / 每人</div>
-            <div class="text-sm font-bold text-sky-400 mt-0.5" id="perPersonTwd">NT$ 0</div>
-            <div class="text-[10px] text-slate-400" id="perPersonJpy">(¥0)</div>
-          </div>
+          <button onclick="toggleSettlementModal()" class="bg-sky-500 hover:bg-sky-400 text-white text-xs font-bold px-3 py-1.5 rounded-xl shadow-sm transition">
+            結算明細 (誰補誰) ❯
+          </button>
+        </div>
+      </div>
+
+      <!-- 成員各自應付/代墊即時結算面板 -->
+      <div id="settlementCard" class="bg-white rounded-2xl p-4 shadow-sm border border-stone-200">
+        <h3 class="text-xs font-bold text-stone-900 mb-2.5 flex items-center justify-between">
+          <span class="flex items-center gap-1.5"><span>👥</span> 4 人即時收支差額</span>
+          <span class="text-[10px] text-stone-400 font-normal">正數代表應收，負數代表應補</span>
+        </h3>
+        <div id="membersBalanceList" class="grid grid-cols-2 gap-2 text-xs">
+          <!-- 動態渲染 4 人的代墊與應付金額 -->
         </div>
       </div>
 
       <!-- 新增消費記錄表單 -->
       <div class="bg-white rounded-2xl p-4 shadow-sm border border-stone-200 space-y-3">
         <h3 class="text-xs font-bold text-stone-900 flex items-center gap-1.5">
-          <span>➕</span> 快速記錄一筆支出
+          <span>➕</span> 記錄一筆支出（可自選分攤對象）
         </h3>
-        <div class="space-y-2">
-          <input type="text" id="expenseTitle" placeholder="項目名稱（如：高森田樂午餐、ETC通行費）" class="w-full bg-stone-50 border border-stone-200 text-xs rounded-xl px-3 py-2.5 text-stone-800 placeholder-stone-400 focus:outline-none focus:border-sky-500">
+        <div class="space-y-2.5">
+          <input type="text" id="expenseTitle" placeholder="項目名稱（如：高森田樂午餐、水果塔）" class="w-full bg-stone-50 border border-stone-200 text-xs rounded-xl px-3 py-2.5 text-stone-800 placeholder-stone-400 focus:outline-none focus:border-sky-500">
+          
           <div class="grid grid-cols-2 gap-2">
             <div class="relative">
               <span class="absolute left-3 top-2.5 text-xs text-stone-400">¥</span>
-              <input type="number" id="expenseAmount" placeholder="金額 (日幣 JPY)" class="w-full bg-stone-50 border border-stone-200 text-xs rounded-xl pl-6 pr-3 py-2.5 text-stone-800 placeholder-stone-400 focus:outline-none focus:border-sky-500">
+              <input type="number" id="expenseAmount" placeholder="金額 (JPY)" class="w-full bg-stone-50 border border-stone-200 text-xs rounded-xl pl-6 pr-3 py-2.5 text-stone-800 placeholder-stone-400 focus:outline-none focus:border-sky-500">
             </div>
             <select id="expenseCategory" class="w-full bg-stone-50 border border-stone-200 text-xs rounded-xl px-2.5 py-2.5 text-stone-700 focus:outline-none focus:border-sky-500">
               <option value="🍽️ 餐飲美食">🍽️ 餐飲美食</option>
               <option value="🚗 交通加油">🚗 交通加油</option>
               <option value="🎟️ 門票活動">🎟️ 門票活動</option>
               <option value="🛍️ 購物採買">🛍️ 購物採買</option>
-              <option value="🏨 住宿住宿">🏨 住宿溫泉</option>
+              <option value="🏨 住宿溫泉">🏨 住宿溫泉</option>
               <option value="📦 其它雜項">📦 其它雜項</option>
             </select>
           </div>
-          <button onclick="addExpense()" class="w-full bg-sky-600 active:scale-[0.98] text-white text-xs font-bold py-2.5 rounded-xl shadow-sm transition">
+
+          <!-- 誰先墊錢 -->
+          <div class="text-xs text-stone-700 pt-1">
+            <span class="font-bold text-stone-800">誰先代墊：</span>
+            <div class="grid grid-cols-4 gap-1.5 mt-1.5 text-center" id="payerSelector">
+              <label class="cursor-pointer">
+                <input type="radio" name="payer" value="我" checked class="peer sr-only">
+                <div class="py-1.5 rounded-lg border border-stone-200 peer-checked:bg-sky-600 peer-checked:text-white peer-checked:border-sky-600 text-[11px] font-medium transition">我</div>
+              </label>
+              <label class="cursor-pointer">
+                <input type="radio" name="payer" value="室友" class="peer sr-only">
+                <div class="py-1.5 rounded-lg border border-stone-200 peer-checked:bg-sky-600 peer-checked:text-white peer-checked:border-sky-600 text-[11px] font-medium transition">室友</div>
+              </label>
+              <label class="cursor-pointer">
+                <input type="radio" name="payer" value="朋友A" class="peer sr-only">
+                <div class="py-1.5 rounded-lg border border-stone-200 peer-checked:bg-sky-600 peer-checked:text-white peer-checked:border-sky-600 text-[11px] font-medium transition">朋友A</div>
+              </label>
+              <label class="cursor-pointer">
+                <input type="radio" name="payer" value="朋友B" class="peer sr-only">
+                <div class="py-1.5 rounded-lg border border-stone-200 peer-checked:bg-sky-600 peer-checked:text-white peer-checked:border-sky-600 text-[11px] font-medium transition">朋友B</div>
+              </label>
+            </div>
+          </div>
+
+          <!-- 誰要分攤（可多選） -->
+          <div class="text-xs text-stone-700 pt-1">
+            <div class="flex justify-between items-center mb-1.5">
+              <span class="font-bold text-stone-800">誰要分攤：</span>
+              <div class="space-x-2 text-[10px] text-sky-600">
+                <button type="button" onclick="setSplitMembers(['我', '室友', '朋友A', '朋友B'])">全選(4人)</button>
+                <button type="button" onclick="setSplitMembers(['我', '室友'])">我們這組(2人)</button>
+                <button type="button" onclick="setSplitMembers(['朋友A', '朋友B'])">朋友這組(2人)</button>
+              </div>
+            </div>
+            <div class="grid grid-cols-4 gap-1.5 text-center" id="splitSelector">
+              <label class="cursor-pointer">
+                <input type="checkbox" value="我" checked class="split-checkbox peer sr-only">
+                <div class="py-1.5 rounded-lg border border-stone-200 peer-checked:bg-emerald-600 peer-checked:text-white peer-checked:border-emerald-600 text-[11px] font-medium transition">我</div>
+              </label>
+              <label class="cursor-pointer">
+                <input type="checkbox" value="室友" checked class="split-checkbox peer sr-only">
+                <div class="py-1.5 rounded-lg border border-stone-200 peer-checked:bg-emerald-600 peer-checked:text-white peer-checked:border-emerald-600 text-[11px] font-medium transition">室友</div>
+              </label>
+              <label class="cursor-pointer">
+                <input type="checkbox" value="朋友A" checked class="split-checkbox peer sr-only">
+                <div class="py-1.5 rounded-lg border border-stone-200 peer-checked:bg-emerald-600 peer-checked:text-white peer-checked:border-emerald-600 text-[11px] font-medium transition">朋友A</div>
+              </label>
+              <label class="cursor-pointer">
+                <input type="checkbox" value="朋友B" checked class="split-checkbox peer sr-only">
+                <div class="py-1.5 rounded-lg border border-stone-200 peer-checked:bg-emerald-600 peer-checked:text-white peer-checked:border-emerald-600 text-[11px] font-medium transition">朋友B</div>
+              </label>
+            </div>
+          </div>
+
+          <button onclick="addExpense()" class="w-full bg-sky-600 active:scale-[0.98] text-white text-xs font-bold py-2.5 rounded-xl shadow-sm transition mt-1">
             儲存支出
           </button>
         </div>
@@ -846,21 +911,40 @@
       }
     }
 
-    // 記帳本地儲存與運算
-    let expenses = JSON.parse(localStorage.getItem('kyushu_expenses') || '[]');
+    
+    // 記帳進階本地儲存與多維度分攤運算
+    const ALL_MEMBERS = ['我', '室友', '朋友A', '朋友B'];
+    let expenses = JSON.parse(localStorage.getItem('kyushu_expenses_v2') || '[]');
 
     function saveExpenses() {
-      localStorage.setItem('kyushu_expenses', JSON.stringify(expenses));
+      localStorage.setItem('kyushu_expenses_v2', JSON.stringify(expenses));
       updateAccountingUI();
+    }
+
+    function setSplitMembers(members) {
+      document.querySelectorAll('.split-checkbox').forEach(cb => {
+        cb.checked = members.includes(cb.value);
+      });
     }
 
     function addExpense() {
       const title = document.getElementById('expenseTitle').value.trim();
       const amount = parseFloat(document.getElementById('expenseAmount').value);
       const category = document.getElementById('expenseCategory').value;
+      const payer = document.querySelector('input[name="payer"]:checked').value;
+      
+      const splitWith = [];
+      document.querySelectorAll('.split-checkbox:checked').forEach(cb => {
+        splitWith.push(cb.value);
+      });
 
       if (!title || isNaN(amount) || amount <= 0) {
         alert('請輸入有效的項目名稱與金額');
+        return;
+      }
+
+      if (splitWith.length === 0) {
+        alert('請至少勾選一位分攤此筆費用的人員');
         return;
       }
 
@@ -869,11 +953,14 @@
         title: title,
         amount: amount,
         category: category,
+        payer: payer,
+        splitWith: splitWith,
         date: new Date().toLocaleDateString('zh-TW', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' })
       });
 
       document.getElementById('expenseTitle').value = '';
       document.getElementById('expenseAmount').value = '';
+      setSplitMembers(ALL_MEMBERS); // 恢復預設全選
       saveExpenses();
     }
 
@@ -893,38 +980,73 @@
       const rate = parseFloat(document.getElementById('rateInput').value) || 0.22;
       const totalJpy = expenses.reduce((sum, item) => sum + item.amount, 0);
       const totalTwd = Math.round(totalJpy * rate);
-      const perJpy = Math.round(totalJpy / 4);
-      const perTwd = Math.round(totalTwd / 4);
 
       document.getElementById('totalJpy').innerText = `¥ ${totalJpy.toLocaleString()}`;
       document.getElementById('totalTwd').innerText = `約 NT$ ${totalTwd.toLocaleString()}`;
-      document.getElementById('perPersonTwd').innerText = `NT$ ${perTwd.toLocaleString()}`;
-      document.getElementById('perPersonJpy').innerText = `(¥ ${perJpy.toLocaleString()})`;
 
+      // 計算各成員收支淨額
+      const paidMap = { '我': 0, '室友': 0, '朋友A': 0, '朋友B': 0 };
+      const oweMap = { '我': 0, '室友': 0, '朋友A': 0, '朋友B': 0 };
+
+      expenses.forEach(item => {
+        // 先付者加上全部金額
+        paidMap[item.payer] = (paidMap[item.payer] || 0) + item.amount;
+
+        // 依參與人數平分應付金額
+        const perShare = item.amount / item.splitWith.length;
+        item.splitWith.forEach(m => {
+          oweMap[m] = (oweMap[m] || 0) + perShare;
+        });
+      });
+
+      const balanceContainer = document.getElementById('membersBalanceList');
+      balanceContainer.innerHTML = ALL_MEMBERS.map(m => {
+        const netJpy = Math.round(paidMap[m] - oweMap[m]);
+        const netTwd = Math.round(netJpy * rate);
+        const isPositive = netJpy >= 0;
+        const colorClass = isPositive ? 'text-emerald-600 bg-emerald-50 border-emerald-100' : 'text-rose-600 bg-rose-50 border-rose-100';
+        const label = isPositive ? '應收' : '應補';
+
+        return `
+          <div class="p-2.5 rounded-xl border ${colorClass}">
+            <div class="flex justify-between items-center font-bold">
+              <span>${m}</span>
+              <span class="text-[10px] px-1.5 py-0.5 rounded ${isPositive ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}">${label}</span>
+            </div>
+            <div class="mt-1 font-black text-sm">${isPositive ? '+' : ''}¥${netJpy.toLocaleString()}</div>
+            <div class="text-[10px] opacity-75">${isPositive ? '+' : ''}NT$ ${netTwd.toLocaleString()}</div>
+          </div>
+        `;
+      }).join('');
+
+      // 渲染明細清單
       const listContainer = document.getElementById('expenseList');
       if (expenses.length === 0) {
         listContainer.innerHTML = '<div class="text-stone-400 text-center py-6 text-xs">目前尚無記帳記錄，點上方開始記帳</div>';
         return;
       }
 
-      listContainer.innerHTML = expenses.map(item => `
-        <div class="flex items-center justify-between p-2.5 rounded-xl bg-stone-50 border border-stone-100">
-          <div>
-            <div class="font-bold text-stone-800">${item.title}</div>
-            <div class="text-[10px] text-stone-400 mt-0.5">${item.category} ｜ ${item.date}</div>
-          </div>
-          <div class="flex items-center gap-3">
-            <div class="text-right">
-              <div class="font-bold text-stone-900">¥${item.amount.toLocaleString()}</div>
-              <div class="text-[10px] text-stone-500">NT$${Math.round(item.amount * rate).toLocaleString()}</div>
+      listContainer.innerHTML = expenses.map(item => {
+        const splitText = item.splitWith.length === ALL_MEMBERS.length ? '全員4人' : item.splitWith.join(', ');
+        return `
+          <div class="flex items-center justify-between p-2.5 rounded-xl bg-stone-50 border border-stone-100">
+            <div>
+              <div class="font-bold text-stone-800">${item.title}</div>
+              <div class="text-[10px] text-stone-400 mt-0.5">${item.category} ｜ ${item.date}</div>
+              <div class="text-[10px] text-sky-700 mt-0.5 font-medium">代墊: <strong>${item.payer}</strong> ｜ 分攤: ${splitText}</div>
             </div>
-            <button onclick="deleteExpense(${item.id})" class="text-stone-300 hover:text-rose-500 text-sm px-1">✕</button>
+            <div class="flex items-center gap-3">
+              <div class="text-right">
+                <div class="font-bold text-stone-900">¥${item.amount.toLocaleString()}</div>
+                <div class="text-[10px] text-stone-500">NT$${Math.round(item.amount * rate).toLocaleString()}</div>
+              </div>
+              <button onclick="deleteExpense(${item.id})" class="text-stone-300 hover:text-rose-500 text-sm px-1">✕</button>
+            </div>
           </div>
-        </div>
-      `).join('');
+        `;
+      }).join('');
     }
 
-    // 初始化記帳介面
     document.addEventListener('DOMContentLoaded', () => {
       updateAccountingUI();
     });
