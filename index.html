@@ -65,6 +65,9 @@
       <button onclick="switchMainTab('food-shop')" id="main-tab-food-shop" class="main-tab px-3.5 py-2 rounded-xl text-stone-600 shrink-0 transition flex items-center gap-1.5">
         <span>🍽️</span> 美食購物
       </button>
+      <button onclick="switchMainTab('souvenir')" id="main-tab-souvenir" class="main-tab px-3.5 py-2 rounded-xl text-stone-600 shrink-0 transition flex items-center gap-1.5">
+        <span>🎁</span> 必買伴手禮
+      </button>
       <button onclick="switchMainTab('goshuin')" id="main-tab-goshuin" class="main-tab px-3.5 py-2 rounded-xl text-stone-600 shrink-0 transition flex items-center gap-1.5">
         <span>⛩️</span> 御朱印
       </button>
@@ -835,6 +838,109 @@
           <!-- 動態渲染清單 -->
         </div>
       </div>
+    </div>
+
+    <!-- ==================== 8. 必買伴手禮分頁 (新增) ==================== -->
+    <div id="view-souvenir" class="main-view space-y-3.5 hidden">
+      <div class="bg-white border border-stone-200 rounded-2xl p-3.5 shadow-sm">
+        <h4 class="text-xs font-bold text-stone-900 flex items-center gap-1.5">
+          <span>✨</span> 熊本・阿蘇・日田 必買高評價伴手禮指南
+        </h4>
+        <p class="text-[11px] text-stone-500 mt-1 leading-relaxed">精選老字號銘菓、和栗甜點、牧場三星奶香與小京都老舖醬料，支援精準地標一鍵導航。</p>
+      </div>
+
+      <!-- 1. 譽之陣太鼓 ＆ 武者返 -->
+      <div class="search-item bg-white rounded-2xl p-4 shadow-sm border border-stone-200">
+        <div class="flex justify-between items-start mb-1">
+          <span class="bg-amber-50 text-amber-800 text-[10px] font-bold px-2 py-0.5 rounded-md">熊本名菓 No.1 ｜ 老字號香梅</span>
+          <span class="text-xs font-bold text-amber-600">★ 4.8 高口碑</span>
+        </div>
+        <h3 class="text-base font-bold text-stone-900">譽之陣太鼓 ＆ 武者返夾心派</h3>
+        <p class="text-xs text-stone-600 mt-1 leading-relaxed"><strong>譽之陣太鼓：</strong>薄羊羹包覆 Q 彈求肥（麻糬）與十勝紅豆，附專屬安全小折刀，甜而不膩。<strong>武者返：</strong>以熊本城石垣為名，折疊 100 層奶油酥皮包覆紫豆餡，烘烤奶香濃郁。（熊本站 AMU PLAZA、機場免稅皆有專櫃）。</p>
+        <div class="mt-3 flex gap-2">
+          <a href="https://maps.google.com/?q=Okashi+no+Kobe+Kumamoto+Station" target="_blank" class="bg-sky-50 text-sky-700 text-xs font-bold px-3 py-1.5 rounded-xl transition inline-block">📍 熊本站門市導航</a>
+          <a href="https://www.kobai.jp/" target="_blank" class="bg-stone-100 text-stone-600 text-xs font-semibold px-3 py-1.5 rounded-xl transition inline-block">品牌官網</a>
+        </div>
+      </div>
+
+      <!-- 2. 栗千里 (福田屋) -->
+      <div class="search-item bg-white rounded-2xl p-4 shadow-sm border border-stone-200">
+        <div class="flex justify-between items-start mb-1">
+          <span class="bg-rose-50 text-rose-800 text-[10px] font-bold px-2 py-0.5 rounded-md">全國金賞 ｜ 熊本產和栗</span>
+          <span class="text-xs font-bold text-rose-600">日本零食大賞 No.1</span>
+        </div>
+        <h3 class="text-base font-bold text-stone-900">福田屋 燒蒙布朗「栗千里」</h3>
+        <p class="text-xs text-stone-600 mt-1 leading-relaxed">曾榮獲「日本全國地方零食排名」全國冠軍！100% 使用優質熊本產和栗泥烘烤，口感濕潤綿密，栗子香氣極其濃醇。獨立精緻小包裝，辦公室分送與送禮質感極高。</p>
+        <div class="mt-3">
+          <a href="https://maps.google.com/?q=AMU+PLAZA+KUMAMOTO+Higo+Yokamon" target="_blank" class="bg-sky-50 text-sky-700 text-xs font-bold px-3 py-1.5 rounded-xl transition inline-block">📍 熊本站 肥後好物市場</a>
+        </div>
+      </div>
+
+      <!-- 3. 阿部牧場 ASO MILK 牛奶點心 -->
+      <div class="search-item bg-white rounded-2xl p-4 shadow-sm border border-stone-200">
+        <div class="flex justify-between items-start mb-1">
+          <span class="bg-blue-50 text-blue-700 text-[10px] font-bold px-2 py-0.5 rounded-md">阿蘇草原 ｜ 世界三星認證鮮乳</span>
+          <span class="text-xs font-bold text-blue-600">無蛋低敏配方</span>
+        </div>
+        <h3 class="text-base font-bold text-stone-900">阿部牧場「ASO MILK」乳牛手工曲奇餅乾</h3>
+        <p class="text-xs text-stone-600 mt-1 leading-relaxed">使用榮獲國際食品界米其林評鑑三星的 ASO MILK 鮮乳製成。乳牛造型的餅乾奶香醇厚，不加蛋配方讓過敏體質也能安心吃；玻璃牛奶瓶裝或鐵盒造型極度可愛。（「道の駅 阿蘇」或機場皆可入手）。</p>
+        <div class="mt-3">
+          <a href="https://maps.google.com/?q=Michinoeki+Aso" target="_blank" class="bg-sky-50 text-sky-700 text-xs font-bold px-3 py-1.5 rounded-xl transition inline-block">📍 道之驛 阿蘇導航</a>
+        </div>
+      </div>
+
+      <!-- 4. 原次郎左衛門 百年老舖 -->
+      <div class="search-item bg-white rounded-2xl p-4 shadow-sm border border-stone-200">
+        <div class="flex justify-between items-start mb-1">
+          <span class="bg-emerald-50 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-md">日田豆田町 ｜ 百年釀造老舖</span>
+          <span class="text-xs font-bold text-emerald-700">★ 4.6 深度老店</span>
+        </div>
+        <h3 class="text-base font-bold text-stone-900">原次郎左衛門「鮎魚露（魚醬）＆ 彩虹彈珠汽水」</h3>
+        <p class="text-xs text-stone-600 mt-1 leading-relaxed">江戶時期傳承至今的釀造老舖。招牌「鮎魚露」以純淨山泉水與天然香魚發酵釀造，無魚腥味且鮮美無比，炒菜滴兩滴風味瞬間昇華；店內還有限量繽紛玻璃瓶裝彈珠汽水，是日田最具辨識度的特色伴手禮。</p>
+        <div class="mt-3">
+          <a href="https://maps.google.com/?q=Hara+Jirozaemon+Hita" target="_blank" class="bg-sky-50 text-sky-700 text-xs font-bold px-3 py-1.5 rounded-xl transition inline-block">📍 精準 Google 地標</a>
+        </div>
+      </div>
+
+      <!-- 5. 赤司日田羊羹本舖 -->
+      <div class="search-item bg-white rounded-2xl p-4 shadow-sm border border-stone-200">
+        <div class="flex justify-between items-start mb-1">
+          <span class="bg-amber-50 text-amber-800 text-[10px] font-bold px-2 py-0.5 rounded-md">水鄉日田 ｜ 國賓御用名點</span>
+          <span class="text-xs font-bold text-amber-700">明治24年創業</span>
+        </div>
+        <h3 class="text-base font-bold text-stone-900">赤司日田羊羹本舖「栗羊羹 / 抹茶羊羹」</h3>
+        <p class="text-xs text-stone-600 mt-1 leading-relaxed">日田市長招待外賓指定的最高級點心。以水鄉日田甘冽地下伏流水熬煮紅豆與大手亡豆，糖度恰如其分不膩喉，外層帶有些微脆糖結晶，配熱茶或手沖黑咖啡堪稱絕品。</p>
+        <div class="mt-3">
+          <a href="https://maps.google.com/?q=Akashi+Hita+Yokan+Honpo" target="_blank" class="bg-sky-50 text-sky-700 text-xs font-bold px-3 py-1.5 rounded-xl transition inline-block">📍 豆田町門市導航</a>
+        </div>
+      </div>
+
+      <!-- 6. 風雅卷 -->
+      <div class="search-item bg-white rounded-2xl p-4 shadow-sm border border-stone-200">
+        <div class="flex justify-between items-start mb-1">
+          <span class="bg-stone-100 text-stone-700 text-[10px] font-bold px-2 py-0.5 rounded-md">鹹香涮嘴 ｜ 熊本特產</span>
+          <span class="text-xs font-bold text-emerald-800">下酒佐茶神物</span>
+        </div>
+        <h3 class="text-base font-bold text-stone-900">風雅卷（海苔裹烤堅果捲）</h3>
+        <p class="text-xs text-stone-600 mt-1 leading-relaxed">將頂級有明海鮮採紫菜海苔烘烤至極致酥脆，內層緊緊包裹腰果、花生、醬油大豆與開心果。每一口都散發海苔鮮味與堅果香脆，獨立小袋長條包裝，極度輕便好帶。</p>
+        <div class="mt-3">
+          <a href="https://maps.google.com/?q=AMU+PLAZA+KUMAMOTO+Higo+Yokamon" target="_blank" class="bg-sky-50 text-sky-700 text-xs font-bold px-3 py-1.5 rounded-xl transition inline-block">📍 熊本站好物市場</a>
+        </div>
+      </div>
+
+      <!-- 7. 黑糖甜甜圈棒 -->
+      <div class="search-item bg-white rounded-2xl p-4 shadow-sm border border-stone-200">
+        <div class="flex justify-between items-start mb-1">
+          <span class="bg-amber-50 text-amber-800 text-[10px] font-bold px-2 py-0.5 rounded-md">國民點心 ｜ 熊本名產</span>
+          <span class="text-xs font-bold text-amber-600">回購率極高</span>
+        </div>
+        <h3 class="text-base font-bold text-stone-900">FUJIBAMBI 黑糖甜甜圈棒（ドーナツ棒）</h3>
+        <p class="text-xs text-stone-600 mt-1 leading-relaxed">榮獲日本全國菓子大博覽會名譽總裁賞！外酥脆、內鬆軟，嚴選沖繩優質黑糖與國產小麥炸製，甜度溫和不油膩，常溫保存期限長，非常適合大量分送親友。</p>
+        <div class="mt-3">
+          <a href="https://maps.google.com/?q=Fujibambi+Kumamoto+Station" target="_blank" class="bg-sky-50 text-sky-700 text-xs font-bold px-3 py-1.5 rounded-xl transition inline-block">📍 門市地標</a>
+        </div>
+      </div>
+
     </div>
 
   </main>
