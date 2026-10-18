@@ -1051,6 +1051,117 @@
       updateAccountingUI();
     });
 
+
+    // 開啟結算明細彈窗
+    function toggleSettlementModal() {
+      const modal = document.getElementById('settlementModal');
+      if (modal.classList.contains('hidden')) {
+        renderSettlementTransfers();
+        modal.classList.remove('hidden');
+      } else {
+        modal.classList.add('hidden');
+      }
+    }
+
+    // 計算最佳找零轉帳路徑 (誰直接給誰多少錢)
+    function renderSettlementTransfers() {
+      const rate = parseFloat(document.getElementById('rateInput').value) || 0.22;
+      const paidMap = { '我': 0, '室友': 0, '朋友A': 0, '朋友B': 0 };
+      const oweMap = { '我': 0, '室友': 0, '朋友A': 0, '朋友B': 0 };
+
+      expenses.forEach(item => {
+        paidMap[item.payer] = (paidMap[item.payer] || 0) + item.amount;
+        const perShare = item.amount / item.splitWith.length;
+        item.splitWith.forEach(m => {
+          oweMap[m] = (oweMap[m] || 0) + perShare;
+        });
+      });
+
+      // 淨額：正數為應收(債權人)，負數為應付(債務人)
+      let creditors = [];
+      let debtors = [];
+
+      ALL_MEMBERS.forEach(m => {
+        const net = Math.round(paidMap[m] - oweMap[m]);
+        if (net > 0) {
+          creditors.push({ name: m, amount: net });
+        } else if (net < 0) {
+          debtors.push({ name: m, amount: -net });
+        }
+      });
+
+      const transfers = [];
+      let cIdx = 0;
+      let dIdx = 0;
+
+      while (cIdx < creditors.length && dIdx < debtors.length) {
+        const c = creditors[cIdx];
+        const d = debtors[dIdx];
+        const settleAmount = Math.min(c.amount, d.amount);
+
+        if (settleAmount > 0) {
+          transfers.push({
+            from: d.name,
+            to: c.name,
+            jpy: settleAmount,
+            twd: Math.round(settleAmount * rate)
+          });
+        }
+
+        c.amount -= settleAmount;
+        d.amount -= settleAmount;
+
+        if (c.amount === 0) cIdx++;
+        if (d.amount === 0) dIdx++;
+      }
+
+      const container = document.getElementById('transferList');
+      if (transfers.length === 0) {
+        container.innerHTML = '<div class="text-stone-400 text-center py-6 text-xs font-medium">目前帳目完全平衡，無人需要補款！</div>';
+        return;
+      }
+
+      container.innerHTML = transfers.map(t => `
+        <div class="flex items-center justify-between p-3 rounded-xl bg-sky-50/70 border border-sky-100">
+          <div class="flex items-center gap-2">
+            <span class="font-bold text-rose-700 bg-rose-100 px-2 py-0.5 rounded text-xs">${t.from}</span>
+            <span class="text-stone-400 text-xs">➔ 應給 ➔</span>
+            <span class="font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded text-xs">${t.to}</span>
+          </div>
+          <div class="text-right">
+            <div class="font-black text-sky-900 text-sm">¥${t.jpy.toLocaleString()}</div>
+            <div class="text-[10px] text-stone-500 font-semibold">NT$ ${t.twd.toLocaleString()}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
   </script>
+
+  <!-- 結算轉帳路徑 Modal 彈窗 -->
+  <div id="settlementModal" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4 transition">
+    <div class="bg-white w-full max-w-md rounded-t-[28px] sm:rounded-2xl p-5 shadow-2xl max-h-[85vh] overflow-y-auto space-y-4 animate-slide-up">
+      <div class="flex justify-between items-center border-b border-stone-100 pb-3">
+        <div>
+          <h3 class="text-base font-black text-stone-900 flex items-center gap-1.5">
+            <span>🤝</span> 最終結算指引（誰補誰）
+          </h3>
+          <p class="text-[11px] text-stone-400 mt-0.5">系統已自動計算出「轉帳次數最少」的找零方案</p>
+        </div>
+        <button onclick="toggleSettlementModal()" class="w-8 h-8 rounded-full bg-stone-100 flex items-center justify-center text-stone-500 font-bold active:scale-95">✕</button>
+      </div>
+
+      <div id="transferList" class="space-y-2.5">
+        <!-- 動態渲染誰給誰多少錢 -->
+      </div>
+
+      <div class="pt-2">
+        <button onclick="toggleSettlementModal()" class="w-full bg-stone-900 text-white font-bold text-xs py-3 rounded-xl active:scale-98 transition shadow-sm">
+          知道了，關閉
+        </button>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>
