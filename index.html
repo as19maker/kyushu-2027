@@ -13,46 +13,122 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
+  
   <style>
+    :root {
+      --concrete-bg: #F5F6F8;
+      --concrete-card: #FFFFFF;
+      --slate-dark: #1E252B;
+      --pine-forest: #2A4436;
+      --mist-ocean: #344E5E;
+      --sand-beige: #EBE7DF;
+      --accent-warm: #C87D55;
+    }
     body {
       -webkit-tap-highlight-color: transparent;
+      background-color: var(--concrete-bg);
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+      letter-spacing: -0.01em;
     }
-    .no-scrollbar::-webkit-scrollbar {
-      display: none;
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* 頂部山霧流動動態 */
+    @keyframes mistFlow {
+      0% { transform: translateX(0) scaleY(1); opacity: 0.35; }
+      50% { transform: translateX(-30px) scaleY(1.08); opacity: 0.55; }
+      100% { transform: translateX(0) scaleY(1); opacity: 0.35; }
     }
-    .no-scrollbar {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
+    .animate-mist {
+      animation: mistFlow 16s ease-in-out infinite;
     }
+
+    /* 軌道脈衝發光動態 */
+    @keyframes pulseGlow {
+      0%, 100% { transform: scale(1); opacity: 0.8; box-shadow: 0 0 0 0 rgba(42, 68, 54, 0.4); }
+      50% { transform: scale(1.15); opacity: 1; box-shadow: 0 0 0 5px rgba(42, 68, 54, 0); }
+    }
+    .pulse-dot {
+      animation: pulseGlow 2.5s infinite;
+    }
+
+    /* 主 Tab 膠囊按鈕選中樣式 */
     .active-main-tab {
-      background-color: #0284C7 !important;
+      background-color: #1E252B !important;
       color: #FFFFFF !important;
-      box-shadow: 0 2px 6px rgba(2, 132, 199, 0.35);
+      box-shadow: 0 4px 12px rgba(30, 37, 43, 0.18);
     }
+    /* 日期 Tab 選中樣式 */
     .active-day-tab {
-      background-color: #0F172A !important;
+      background-color: #2A4436 !important;
       color: #FFFFFF !important;
+      border-color: #2A4436 !important;
+      box-shadow: 0 4px 14px rgba(42, 68, 54, 0.25);
+    }
+
+    /* 細微玻璃擬態與清水模質感卡片 */
+    .concrete-card {
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .concrete-card:hover {
+      border-color: rgba(203, 213, 225, 1);
+      box-shadow: 0 6px 18px -4px rgba(0, 0, 0, 0.05);
     }
   </style>
+
 </head>
 <body class="bg-[#F4F6F9] text-stone-800 antialiased min-h-screen pb-28">
 
   <!-- 頂部漸層 Header -->
-  <header class="bg-gradient-to-b from-[#0284C7] to-[#0EA5E9] text-white px-5 pt-8 pb-6 rounded-b-[28px] shadow-sm">
-    <div class="max-w-md mx-auto">
-      <div class="flex items-center space-x-2">
-        <h1 class="text-2xl font-black tracking-wide flex items-center gap-1.5">
-          2027<span class="text-xl">🇯🇵</span>九州
+  
+  <!-- 頂部：清水模冷杉山海 Header ＋ 柔和晨霧動態 -->
+  <header class="relative overflow-hidden bg-gradient-to-b from-[#1C262B] via-[#24333A] to-[#2D423B] text-white pt-9 pb-8 px-5 rounded-b-[32px] shadow-sm">
+    <!-- 背景山脈剪影與漂浮霧氣 (純 CSS 動態) -->
+    <div class="absolute inset-0 pointer-events-none opacity-40">
+      <!-- 遠山 SVG -->
+      <svg class="absolute bottom-0 w-[140%] -left-[20%] text-[#141C20] fill-current" viewBox="0 0 500 120" preserveAspectRatio="none">
+        <path d="M0,120 L0,70 Q70,25 150,65 T300,45 Q380,20 500,80 L500,120 Z"></path>
+      </svg>
+      <!-- 近山墨綠剪影 -->
+      <svg class="absolute bottom-0 w-[140%] -left-[10%] text-[#1E2E28]/70 fill-current" viewBox="0 0 500 100" preserveAspectRatio="none">
+        <path d="M0,100 L0,55 Q100,15 220,50 T420,30 Q470,20 500,60 L500,100 Z"></path>
+      </svg>
+      <!-- 柔和晨霧動畫層 -->
+      <div class="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-white/10 to-transparent animate-mist"></div>
+    </div>
+
+    <div class="relative max-w-md mx-auto flex items-end justify-between">
+      <div>
+        <div class="flex items-center space-x-2 text-[10px] tracking-widest uppercase font-semibold text-emerald-200/90 mb-1">
+          <span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 pulse-dot"></span>
+          <span>KYUSHU ROAD TRIP 2027</span>
+        </div>
+        <h1 class="text-2xl font-black tracking-tight text-white flex items-center gap-2">
+          九州慢活自駕 <span class="text-xs font-normal px-2 py-0.5 rounded-full bg-white/15 text-stone-200 backdrop-blur-sm border border-white/10">6 Days</span>
         </h1>
+        <p class="text-[11px] text-stone-300 font-normal mt-1 tracking-wide flex items-center gap-1.5">
+          <span>熊本</span><span class="opacity-40">•</span>
+          <span>阿蘇火山</span><span class="opacity-40">•</span>
+          <span>黑川溫泉</span><span class="opacity-40">•</span>
+          <span>日田小京都</span>
+        </p>
       </div>
-      <p class="text-xs text-sky-100 font-medium mt-1 tracking-wide">詳細行程・住宿交通・美食伴手禮</p>
+
+      <!-- 右側極簡質感小標誌 -->
+      <div class="text-right">
+        <div class="w-10 h-10 rounded-2xl bg-white/10 backdrop-blur-md border border-white/15 flex items-center justify-center text-lg shadow-inner">
+          🗻
+        </div>
+      </div>
     </div>
   </header>
 
+
   <!-- 主功能橫向滾動 Tab Bar -->
   <section class="max-w-md mx-auto px-4 -mt-3.5">
-    <div class="bg-white/95 backdrop-blur-md p-1.5 rounded-2xl shadow-sm border border-stone-100 flex overflow-x-auto no-scrollbar space-x-2 text-xs font-semibold">
+    <div class="bg-white/90 backdrop-blur-md p-1.5 rounded-2xl shadow-sm border border-stone-200/80 flex overflow-x-auto no-scrollbar space-x-1.5 text-xs font-medium">
       <button onclick="switchMainTab('itinerary')" id="main-tab-itinerary" class="main-tab active-main-tab px-3.5 py-2 rounded-xl text-stone-600 shrink-0 transition flex items-center gap-1.5">
         <span>🗓️</span> 詳細行程
       </button>
@@ -102,34 +178,38 @@
         <p id="geo-status" class="text-[11px] text-stone-400 mt-2 font-medium">尚未取得目前位置</p>
       </div>
 
-      <!-- Day 1 ~ Day 6 切換 Tab -->
-      <div class="grid grid-cols-4 gap-2 text-center text-xs font-bold">
-        <button onclick="switchDay('d1')" id="day-tab-d1" class="day-tab active-day-tab bg-white border border-stone-200 text-stone-800 py-2 rounded-xl shadow-sm transition">
-          <div class="text-[11px]">DAY 1</div>
-          <div class="text-[10px] opacity-70">週四</div>
-        </button>
-        <button onclick="switchDay('d2')" id="day-tab-d2" class="day-tab bg-white border border-stone-200 text-stone-800 py-2 rounded-xl shadow-sm transition">
-          <div class="text-[11px]">DAY 2</div>
-          <div class="text-[10px] opacity-70">週五</div>
-        </button>
-        <button onclick="switchDay('d3')" id="day-tab-d3" class="day-tab bg-white border border-stone-200 text-stone-800 py-2 rounded-xl shadow-sm transition">
-          <div class="text-[11px]">DAY 3</div>
-          <div class="text-[10px] opacity-70">週六</div>
-        </button>
-        <button onclick="switchDay('d4')" id="day-tab-d4" class="day-tab bg-white border border-stone-200 text-stone-800 py-2 rounded-xl shadow-sm transition">
-          <div class="text-[11px]">DAY 4</div>
-          <div class="text-[10px] opacity-70">週日</div>
-        </button>
-      </div>
-      <div class="grid grid-cols-2 gap-2 text-center text-xs font-bold">
-        <button onclick="switchDay('d5')" id="day-tab-d5" class="day-tab bg-white border border-stone-200 text-stone-800 py-2 rounded-xl shadow-sm transition">
-          <div class="text-[11px]">DAY 5</div>
-          <div class="text-[10px] opacity-70">週一</div>
-        </button>
-        <button onclick="switchDay('d6')" id="day-tab-d6" class="day-tab bg-white border border-stone-200 text-stone-800 py-2 rounded-xl shadow-sm transition">
-          <div class="text-[11px]">DAY 6</div>
-          <div class="text-[10px] opacity-70">週二・返台</div>
-        </button>
+      <!-- 日期自駕公路軌道站點 Tab -->
+      <div class="bg-white/80 backdrop-blur p-2 rounded-2xl border border-stone-200/80 shadow-sm">
+        <div class="flex items-center justify-between text-[11px] font-semibold text-stone-500 mb-1.5 px-1">
+          <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-600 inline-block"></span>自駕日程路線</span>
+          <span class="text-[10px] text-stone-400">點擊切換當日行程</span>
+        </div>
+        <div class="grid grid-cols-6 gap-1.5 text-center text-xs font-bold">
+          <button onclick="switchDay('d1')" id="day-tab-d1" class="day-tab active-day-tab bg-stone-100/80 border border-stone-200/80 text-stone-700 py-2 rounded-xl transition duration-150">
+            <div class="text-[10px] font-mono tracking-tight">D1</div>
+            <div class="text-[9px] font-normal opacity-70">抵達</div>
+          </button>
+          <button onclick="switchDay('d2')" id="day-tab-d2" class="day-tab bg-stone-100/80 border border-stone-200/80 text-stone-700 py-2 rounded-xl transition duration-150">
+            <div class="text-[10px] font-mono tracking-tight">D2</div>
+            <div class="text-[9px] font-normal opacity-70">阿蘇</div>
+          </button>
+          <button onclick="switchDay('d3')" id="day-tab-d3" class="day-tab bg-stone-100/80 border border-stone-200/80 text-stone-700 py-2 rounded-xl transition duration-150">
+            <div class="text-[10px] font-mono tracking-tight">D3</div>
+            <div class="text-[9px] font-normal opacity-70">黑川</div>
+          </button>
+          <button onclick="switchDay('d4')" id="day-tab-d4" class="day-tab bg-stone-100/80 border border-stone-200/80 text-stone-700 py-2 rounded-xl transition duration-150">
+            <div class="text-[10px] font-mono tracking-tight">D4</div>
+            <div class="text-[9px] font-normal opacity-70">日田</div>
+          </button>
+          <button onclick="switchDay('d5')" id="day-tab-d5" class="day-tab bg-stone-100/80 border border-stone-200/80 text-stone-700 py-2 rounded-xl transition duration-150">
+            <div class="text-[10px] font-mono tracking-tight">D5</div>
+            <div class="text-[9px] font-normal opacity-70">市區</div>
+          </button>
+          <button onclick="switchDay('d6')" id="day-tab-d6" class="day-tab bg-stone-100/80 border border-stone-200/80 text-stone-700 py-2 rounded-xl transition duration-150">
+            <div class="text-[10px] font-mono tracking-tight">D6</div>
+            <div class="text-[9px] font-normal opacity-70">返台</div>
+          </button>
+        </div>
       </div>
 
       <!-- DAY 1 內容 -->
@@ -139,7 +219,7 @@
         </div>
 
         <!-- 景點 1 -->
-        <div class="search-item bg-white rounded-2xl p-4 shadow-sm border border-stone-200">
+        <div class="search-item concrete-card rounded-2xl p-4 shadow-sm">
           <div class="flex items-center space-x-2 mb-2">
             <span class="bg-sky-50 text-sky-700 text-[10px] font-bold px-2 py-0.5 rounded-md">13:30 - 14:30</span>
             <span class="bg-emerald-50 text-emerald-700 text-[10px] font-bold px-2 py-0.5 rounded-md">入境取車</span>
@@ -162,7 +242,7 @@
         </div>
 
         <!-- 景點 2 -->
-        <div class="search-item bg-white rounded-2xl p-4 shadow-sm border border-stone-200">
+        <div class="search-item concrete-card rounded-2xl p-4 shadow-sm">
           <div class="flex items-center space-x-2 mb-2">
             <span class="bg-sky-50 text-sky-700 text-[10px] font-bold px-2 py-0.5 rounded-md">15:30 - 16:30</span>
             <span class="bg-amber-50 text-amber-800 text-[10px] font-bold px-2 py-0.5 rounded-md">文化散策 ｜ 御朱印</span>
@@ -177,7 +257,7 @@
         </div>
 
         <!-- 景點 3：Gluck Coffee Spot -->
-        <div class="search-item bg-white rounded-2xl p-4 shadow-sm border border-stone-200">
+        <div class="search-item concrete-card rounded-2xl p-4 shadow-sm">
           <div class="flex items-center space-x-2 mb-2">
             <span class="bg-sky-50 text-sky-700 text-[10px] font-bold px-2 py-0.5 rounded-md">17:00 - 18:00</span>
             <span class="bg-rose-50 text-rose-700 text-[10px] font-bold px-2 py-0.5 rounded-md">手沖名店 ｜ 紅豆土司</span>
@@ -195,7 +275,7 @@
         </div>
 
         <!-- 景點 4：福雞居酒屋 -->
-        <div class="search-item bg-white rounded-2xl p-4 shadow-sm border border-stone-200">
+        <div class="search-item concrete-card rounded-2xl p-4 shadow-sm">
           <div class="flex items-center space-x-2 mb-2">
             <span class="bg-sky-50 text-sky-700 text-[10px] font-bold px-2 py-0.5 rounded-md">18:30 - 20:30</span>
             <span class="bg-amber-50 text-amber-800 text-[10px] font-bold px-2 py-0.5 rounded-md">居酒屋 ｜ 炭火地雞</span>
@@ -216,7 +296,7 @@
           <h3 class="text-sm font-bold text-stone-900 leading-snug">Day 2：白川名水 ➔ 上色見熊野座 ➔ 高森田樂傳統午餐 ➔ 草千里 ➔ 阿蘇北麓</h3>
         </div>
 
-        <div class="search-item bg-white rounded-2xl p-4 shadow-sm border border-stone-200">
+        <div class="search-item concrete-card rounded-2xl p-4 shadow-sm">
           <div class="flex items-center space-x-2 mb-2">
             <span class="bg-sky-50 text-sky-700 text-[10px] font-bold px-2 py-0.5 rounded-md">09:30 - 10:15</span>
             <span class="bg-blue-50 text-blue-700 text-[10px] font-bold px-2 py-0.5 rounded-md">名水百選 ｜ 生飲</span>
@@ -230,7 +310,7 @@
           </div>
         </div>
 
-        <div class="search-item bg-white rounded-2xl p-4 shadow-sm border border-stone-200">
+        <div class="search-item concrete-card rounded-2xl p-4 shadow-sm">
           <div class="flex items-center space-x-2 mb-2">
             <span class="bg-sky-50 text-sky-700 text-[10px] font-bold px-2 py-0.5 rounded-md">10:45 - 11:45</span>
             <span class="bg-emerald-50 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-md">苔蘚秘境 ｜ 御朱印</span>
@@ -245,7 +325,7 @@
         </div>
 
         <!-- 新增：高森田樂保存會 -->
-        <div class="search-item bg-white rounded-2xl p-4 shadow-sm border border-stone-200">
+        <div class="search-item concrete-card rounded-2xl p-4 shadow-sm">
           <div class="flex items-center space-x-2 mb-2">
             <span class="bg-sky-50 text-sky-700 text-[10px] font-bold px-2 py-0.5 rounded-md">12:00 - 13:30</span>
             <span class="bg-rose-50 text-rose-800 text-[10px] font-bold px-2 py-0.5 rounded-md">傳統鄉土料理 ｜ 炭火地爐</span>
@@ -259,7 +339,7 @@
           </div>
         </div>
 
-        <div class="search-item bg-white rounded-2xl p-4 shadow-sm border border-stone-200">
+        <div class="search-item concrete-card rounded-2xl p-4 shadow-sm">
           <div class="flex items-center space-x-2 mb-2">
             <span class="bg-sky-50 text-sky-700 text-[10px] font-bold px-2 py-0.5 rounded-md">14:00 - 15:45</span>
             <span class="bg-amber-50 text-amber-800 text-[10px] font-bold px-2 py-0.5 rounded-md">火山地景 ｜ 木棧道</span>
@@ -280,7 +360,7 @@
           <h3 class="text-sm font-bold text-stone-900 leading-snug">Day 3：馳騁牛奶之路 ➔ 晨光大觀峰 ➔ 山波公路 ➔ 長者原濕原 ➔ 黑川名宿</h3>
         </div>
 
-        <div class="search-item bg-white rounded-2xl p-4 shadow-sm border border-stone-200">
+        <div class="search-item concrete-card rounded-2xl p-4 shadow-sm">
           <div class="flex items-center space-x-2 mb-2">
             <span class="bg-sky-50 text-sky-700 text-[10px] font-bold px-2 py-0.5 rounded-md">09:00 - 10:00</span>
             <span class="bg-emerald-50 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-md">360° 順光絕景</span>
@@ -301,7 +381,7 @@
           </div>
         </div>
 
-        <div class="search-item bg-white rounded-2xl p-4 shadow-sm border border-stone-200">
+        <div class="search-item concrete-card rounded-2xl p-4 shadow-sm">
           <div class="flex items-center space-x-2 mb-2">
             <span class="bg-sky-50 text-sky-700 text-[10px] font-bold px-2 py-0.5 rounded-md">11:00 - 12:30</span>
             <span class="bg-blue-50 text-blue-700 text-[10px] font-bold px-2 py-0.5 rounded-md">日本最美公路 ｜ 濕原木棧道</span>
@@ -315,7 +395,7 @@
           </div>
         </div>
 
-        <div class="search-item bg-white rounded-2xl p-4 shadow-sm border border-stone-200">
+        <div class="search-item concrete-card rounded-2xl p-4 shadow-sm">
           <div class="flex items-center space-x-2 mb-2">
             <span class="bg-sky-50 text-sky-700 text-[10px] font-bold px-2 py-0.5 rounded-md">14:30 入住</span>
             <span class="bg-rose-50 text-rose-800 text-[10px] font-bold px-2 py-0.5 rounded-md">一泊二食 ｜ 入湯手形</span>
@@ -336,7 +416,7 @@
           <h3 class="text-sm font-bold text-stone-900 leading-snug">Day 4：手打十割蕎麥 ➔ 水鄉日田小京都 ➔ 現烤脆皮鰻魚 ➔ 高速返市區</h3>
         </div>
 
-        <div class="search-item bg-white rounded-2xl p-4 shadow-sm border border-stone-200">
+        <div class="search-item concrete-card rounded-2xl p-4 shadow-sm">
           <div class="flex items-center space-x-2 mb-2">
             <span class="bg-sky-50 text-sky-700 text-[10px] font-bold px-2 py-0.5 rounded-md">10:30 - 11:30</span>
             <span class="bg-amber-50 text-amber-800 text-[10px] font-bold px-2 py-0.5 rounded-md">小國町名物</span>
@@ -350,7 +430,7 @@
           </div>
         </div>
 
-        <div class="search-item bg-white rounded-2xl p-4 shadow-sm border border-stone-200">
+        <div class="search-item concrete-card rounded-2xl p-4 shadow-sm">
           <div class="flex items-center space-x-2 mb-2">
             <span class="bg-sky-50 text-sky-700 text-[10px] font-bold px-2 py-0.5 rounded-md">12:30 - 16:00</span>
             <span class="bg-stone-100 text-stone-700 text-[10px] font-bold px-2 py-0.5 rounded-md">小京都散策 ｜ 百年鰻魚</span>
@@ -375,7 +455,7 @@
         </div>
 
                 <!-- 新增：licht coffeecakes (熊本市區黑髮) -->
-        <div class="search-item bg-white rounded-2xl p-4 shadow-sm border border-stone-200">
+        <div class="search-item concrete-card rounded-2xl p-4 shadow-sm">
           <div class="flex items-center space-x-2 mb-2">
             <span class="bg-sky-50 text-sky-700 text-[10px] font-bold px-2 py-0.5 rounded-md">晨間推薦 ｜ 07:30 營業</span>
             <span class="bg-rose-50 text-rose-800 text-[10px] font-bold px-2 py-0.5 rounded-md">市區老屋咖啡 ｜ 自製磅蛋糕</span>
@@ -390,7 +470,7 @@
         </div>
 
         <!-- 新增：flour + water 熊本 -->
-        <div class="search-item bg-white rounded-2xl p-4 shadow-sm border border-stone-200">
+        <div class="search-item concrete-card rounded-2xl p-4 shadow-sm">
           <div class="flex items-center space-x-2 mb-2">
             <span class="bg-sky-50 text-sky-700 text-[10px] font-bold px-2 py-0.5 rounded-md">09:30 - 11:00</span>
             <span class="bg-rose-50 text-rose-800 text-[10px] font-bold px-2 py-0.5 rounded-md">人氣烘焙早午餐 ｜ Threads 爆紅舒芙蕾</span>
@@ -405,7 +485,7 @@
         </div>
 
         <!-- AMU PLAZA 跑鞋 -->
-        <div class="search-item bg-white rounded-2xl p-4 shadow-sm border border-stone-200">
+        <div class="search-item concrete-card rounded-2xl p-4 shadow-sm">
           <div class="flex items-center space-x-2 mb-2">
             <span class="bg-sky-50 text-sky-700 text-[10px] font-bold px-2 py-0.5 rounded-md">11:30 - 13:30</span>
             <span class="bg-blue-50 text-blue-700 text-[10px] font-bold px-2 py-0.5 rounded-md">跑鞋服裝 ｜ 站體共構</span>
@@ -420,7 +500,7 @@
         </div>
 
         <!-- 下通商圈 -->
-        <div class="search-item bg-white rounded-2xl p-4 shadow-sm border border-stone-200">
+        <div class="search-item concrete-card rounded-2xl p-4 shadow-sm">
           <div class="flex items-center space-x-2 mb-2">
             <span class="bg-sky-50 text-sky-700 text-[10px] font-bold px-2 py-0.5 rounded-md">14:00 - 16:00</span>
             <span class="bg-purple-50 text-purple-700 text-[10px] font-bold px-2 py-0.5 rounded-md">動漫周邊 ｜ 扭蛋模型</span>
@@ -435,7 +515,7 @@
         </div>
 
         <!-- 新增：Coffeedot ＆ Princess Tart -->
-        <div class="search-item bg-white rounded-2xl p-4 shadow-sm border border-stone-200">
+        <div class="search-item concrete-card rounded-2xl p-4 shadow-sm">
           <div class="flex items-center space-x-2 mb-2">
             <span class="bg-sky-50 text-sky-700 text-[10px] font-bold px-2 py-0.5 rounded-md">16:00 - 17:30</span>
             <span class="bg-rose-50 text-rose-800 text-[10px] font-bold px-2 py-0.5 rounded-md">下午茶甜點 ｜ 手沖特化</span>
@@ -461,7 +541,7 @@
           <h3 class="text-sm font-bold text-stone-900 leading-snug">Day 6：水前寺成趣園 ➔ 出水神社御朱印 ➔ 加滿油還車 ✈ 返台</h3>
         </div>
 
-        <div class="search-item bg-white rounded-2xl p-4 shadow-sm border border-stone-200">
+        <div class="search-item concrete-card rounded-2xl p-4 shadow-sm">
           <div class="flex items-center space-x-2 mb-2">
             <span class="bg-sky-50 text-sky-700 text-[10px] font-bold px-2 py-0.5 rounded-md">08:30 - 09:45</span>
             <span class="bg-emerald-50 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-md">湧泉庭園 ｜ 最終御朱印</span>
@@ -475,7 +555,7 @@
           </div>
         </div>
 
-        <div class="search-item bg-white rounded-2xl p-4 shadow-sm border border-stone-200">
+        <div class="search-item concrete-card rounded-2xl p-4 shadow-sm">
           <div class="flex items-center space-x-2 mb-2">
             <span class="bg-sky-50 text-sky-700 text-[10px] font-bold px-2 py-0.5 rounded-md">10:30 - 12:00</span>
             <span class="bg-stone-100 text-stone-700 text-[10px] font-bold px-2 py-0.5 rounded-md">還車登機</span>
@@ -516,7 +596,7 @@
 
     <!-- ==================== 3. 行前住宿分頁 ==================== -->
     <div id="view-hotel" class="main-view space-y-3.5 hidden">
-      <div class="search-item bg-white rounded-2xl p-4 shadow-sm border border-stone-200">
+      <div class="search-item concrete-card rounded-2xl p-4 shadow-sm">
         <div class="flex justify-between items-start mb-1">
           <span class="bg-sky-50 text-sky-700 text-[10px] font-bold px-2 py-0.5 rounded-md">Day 1 ＆ Day 4–5（共 3 晚）</span>
           <span class="text-xs font-bold text-emerald-800">開 2 間雙人房</span>
@@ -528,7 +608,7 @@
         </div>
       </div>
 
-      <div class="search-item bg-white rounded-2xl p-4 shadow-sm border border-stone-200">
+      <div class="search-item concrete-card rounded-2xl p-4 shadow-sm">
         <div class="flex justify-between items-start mb-1">
           <span class="bg-emerald-50 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-md">Day 2（1 晚）</span>
           <span class="text-xs font-bold text-emerald-800">阿蘇山景</span>
@@ -540,7 +620,7 @@
         </div>
       </div>
 
-      <div class="search-item bg-white rounded-2xl p-4 shadow-sm border border-stone-200">
+      <div class="search-item concrete-card rounded-2xl p-4 shadow-sm">
         <div class="flex justify-between items-start mb-1">
           <span class="bg-rose-50 text-rose-800 text-[10px] font-bold px-2 py-0.5 rounded-md">Day 3（1 晚）</span>
           <span class="text-xs font-bold text-emerald-800">溪谷名宿 一泊二食</span>
@@ -563,7 +643,7 @@
       </div>
 
       <!-- 高森田樂保存會 -->
-      <div class="search-item bg-white rounded-2xl p-4 shadow-sm border border-stone-200">
+      <div class="search-item concrete-card rounded-2xl p-4 shadow-sm">
         <span class="bg-rose-50 text-rose-800 text-[10px] font-bold px-2 py-0.5 rounded-md">鄉土料理 ｜ 南阿蘇 高森町</span>
         <h3 class="text-base font-bold text-stone-900 mt-1">高森田樂保存會（高森田楽保存会）</h3>
         <p class="text-xs text-stone-600 mt-1 leading-relaxed">4.6★ (640則評價)。古民家圍地爐炭火慢烤特製味噌芋頭、豆腐與溪魚，是參拜上色見熊野座神社後的絕佳午餐。</p>
@@ -573,7 +653,7 @@
       </div>
 
       <!-- licht coffeecakes -->
-      <div class="search-item bg-white rounded-2xl p-4 shadow-sm border border-stone-200">
+      <div class="search-item concrete-card rounded-2xl p-4 shadow-sm">
         <span class="bg-amber-50 text-amber-800 text-[10px] font-bold px-2 py-0.5 rounded-md">咖啡甜點 ｜ 熊本市西區春日（JR 熊本站前）</span>
         <h3 class="text-base font-bold text-stone-900 mt-1">licht coffeecakes</h3>
         <p class="text-xs text-stone-600 mt-1 leading-relaxed">4.6★ (267則評價)。位於熊本市西區春日（JR 熊本站前）的質感木造老屋，07:30 晨間即營業，招牌淺焙手沖咖啡配自製扎實磅蛋糕，市區散策早晨首選。</p>
@@ -583,7 +663,7 @@
       </div>
 
       <!-- Gluck Coffee Spot -->
-      <div class="search-item bg-white rounded-2xl p-4 shadow-sm border border-stone-200">
+      <div class="search-item concrete-card rounded-2xl p-4 shadow-sm">
         <span class="bg-emerald-50 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-md">精品咖啡 ｜ 熊本城下町</span>
         <h3 class="text-base font-bold text-stone-900 mt-1">Gluck Coffee Spot</h3>
         <p class="text-xs text-stone-600 mt-1 leading-relaxed">4.5★ (421則評價)。城下町古民家手沖名店，乾淨果香淺焙單品，必點招牌現烤紅豆奶油厚吐司。</p>
@@ -594,7 +674,7 @@
       </div>
 
       <!-- Coffeedot -->
-      <div class="search-item bg-white rounded-2xl p-4 shadow-sm border border-stone-200">
+      <div class="search-item concrete-card rounded-2xl p-4 shadow-sm">
         <span class="bg-emerald-50 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-md">自家烘焙手沖 ｜ 熊本市區</span>
         <h3 class="text-base font-bold text-stone-900 mt-1">Coffeedot</h3>
         <p class="text-xs text-stone-600 mt-1 leading-relaxed">4.8★ (188則評價)。專業自家烘焙特化店，極簡低調黑灰風格，義式拉花極美、手沖豆單風味乾淨細緻。</p>
@@ -604,7 +684,7 @@
       </div>
 
       <!-- flour + water 熊本 -->
-      <div class="search-item bg-white rounded-2xl p-4 shadow-sm border border-stone-200">
+      <div class="search-item concrete-card rounded-2xl p-4 shadow-sm">
         <span class="bg-rose-50 text-rose-800 text-[10px] font-bold px-2 py-0.5 rounded-md">烘焙早午餐 ｜ 熊本市區</span>
         <h3 class="text-base font-bold text-stone-900 mt-1">flour + water 熊本</h3>
         <p class="text-xs text-stone-600 mt-1 leading-relaxed">4.5★ (876則評價)。Threads 爆紅排隊名店！精緻歐式可頌麵包盤、純茶飲，以及入口即化的招牌空氣感舒芙蕾。</p>
@@ -614,7 +694,7 @@
       </div>
 
       <!-- Princess Tart Kumamoto -->
-      <div class="search-item bg-white rounded-2xl p-4 shadow-sm border border-stone-200">
+      <div class="search-item concrete-card rounded-2xl p-4 shadow-sm">
         <span class="bg-amber-50 text-amber-800 text-[10px] font-bold px-2 py-0.5 rounded-md">水果塔專門 ｜ 熊本市區</span>
         <h3 class="text-base font-bold text-stone-900 mt-1">Princess Tart Kumamoto</h3>
         <p class="text-xs text-stone-600 mt-1 leading-relaxed">4.6★ (665則評價)。超人氣手作千層派皮水果塔，當季滿滿草莓、無花果、麝香葡萄，外帶回飯店吃極度享受。</p>
@@ -624,7 +704,7 @@
       </div>
 
       <!-- 福雞 (ふくどり) -->
-      <div class="search-item bg-white rounded-2xl p-4 shadow-sm border border-stone-200">
+      <div class="search-item concrete-card rounded-2xl p-4 shadow-sm">
         <span class="bg-amber-50 text-amber-800 text-[10px] font-bold px-2 py-0.5 rounded-md">串燒居酒屋 ｜ 熊本市區</span>
         <h3 class="text-base font-bold text-stone-900 mt-1">福雞（やきとり酒場 福鶏）</h3>
         <p class="text-xs text-stone-600 mt-1 leading-relaxed">4.7★ (54則評價)。平價道地的炭火燒鳥居酒屋，現烤醬烤雞皮、地雞串燒香氣撲鼻，營業至深夜 24:00。</p>
@@ -634,7 +714,7 @@
       </div>
 
       <!-- 戶山鰻魚飯 -->
-      <div class="search-item bg-white rounded-2xl p-4 shadow-sm border border-stone-200">
+      <div class="search-item concrete-card rounded-2xl p-4 shadow-sm">
         <span class="bg-emerald-50 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-md">百年名物 ｜ 水鄉日田</span>
         <h3 class="text-base font-bold text-stone-900 mt-1">戶山鰻魚飯（戶山うなぎ）</h3>
         <p class="text-xs text-stone-600 mt-1 leading-relaxed">以日田純冽地下泉蓄養去土味，炭火現烤香脆蒲燒鰻魚飯。</p>
@@ -644,7 +724,7 @@
       </div>
 
       <!-- Threads 推薦 1: 勝烈亭 熊本新市街總店 -->
-      <div class="search-item bg-white rounded-2xl p-4 shadow-sm border border-stone-200">
+      <div class="search-item concrete-card rounded-2xl p-4 shadow-sm">
         <div class="flex justify-between items-start mb-1">
           <span class="bg-rose-50 text-rose-800 text-[10px] font-bold px-2 py-0.5 rounded-md">Threads 狂推 ｜ 米其林推薦</span>
           <span class="text-xs font-bold text-amber-600">★ 4.5 (5,000+ 評價)</span>
@@ -657,7 +737,7 @@
       </div>
 
       <!-- Threads 推薦 2: Patisserie Roku (麓) -->
-      <div class="search-item bg-white rounded-2xl p-4 shadow-sm border border-stone-200">
+      <div class="search-item concrete-card rounded-2xl p-4 shadow-sm">
         <div class="flex justify-between items-start mb-1">
           <span class="bg-amber-50 text-amber-800 text-[10px] font-bold px-2 py-0.5 rounded-md">黑川老街人手一顆 ｜ 現烤秒殺</span>
           <span class="text-xs font-bold text-rose-600">★ 4.6 超高人氣</span>
@@ -670,7 +750,7 @@
       </div>
 
       <!-- Threads 推薦 3: どらどら 銅鑼燒 & 山吹色牛乳 -->
-      <div class="search-item bg-white rounded-2xl p-4 shadow-sm border border-stone-200">
+      <div class="search-item concrete-card rounded-2xl p-4 shadow-sm">
         <div class="flex justify-between items-start mb-1">
           <span class="bg-emerald-50 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-md">黑川散策小點 ｜ 冰大福銅鑼燒</span>
           <span class="text-xs font-bold text-emerald-700">★ 4.5 傳統菓子</span>
@@ -683,7 +763,7 @@
       </div>
 
       <!-- Threads 推薦 4: いまきん食堂 (阿蘇百年名店) -->
-      <div class="search-item bg-white rounded-2xl p-4 shadow-sm border border-stone-200">
+      <div class="search-item concrete-card rounded-2xl p-4 shadow-sm">
         <div class="flex justify-between items-start mb-1">
           <span class="bg-blue-50 text-blue-700 text-[10px] font-bold px-2 py-0.5 rounded-md">阿蘇赤牛傳奇 ｜ 創業百年</span>
           <span class="text-xs font-bold text-blue-600">★ 4.4 (4,000+ 評價)</span>
@@ -902,7 +982,7 @@
       </div>
 
       <!-- 1. 譽之陣太鼓 ＆ 武者返 -->
-      <div class="search-item bg-white rounded-2xl p-4 shadow-sm border border-stone-200">
+      <div class="search-item concrete-card rounded-2xl p-4 shadow-sm">
         <div class="flex justify-between items-start mb-1">
           <span class="bg-amber-50 text-amber-800 text-[10px] font-bold px-2 py-0.5 rounded-md">熊本名菓 No.1 ｜ 老字號香梅</span>
           <span class="text-xs font-bold text-amber-600">★ 4.8 高口碑</span>
@@ -916,7 +996,7 @@
       </div>
 
       <!-- 2. 栗千里 (福田屋) -->
-      <div class="search-item bg-white rounded-2xl p-4 shadow-sm border border-stone-200">
+      <div class="search-item concrete-card rounded-2xl p-4 shadow-sm">
         <div class="flex justify-between items-start mb-1">
           <span class="bg-rose-50 text-rose-800 text-[10px] font-bold px-2 py-0.5 rounded-md">全國金賞 ｜ 熊本產和栗</span>
           <span class="text-xs font-bold text-rose-600">日本零食大賞 No.1</span>
@@ -929,7 +1009,7 @@
       </div>
 
       <!-- 3. 阿部牧場 ASO MILK 牛奶點心 -->
-      <div class="search-item bg-white rounded-2xl p-4 shadow-sm border border-stone-200">
+      <div class="search-item concrete-card rounded-2xl p-4 shadow-sm">
         <div class="flex justify-between items-start mb-1">
           <span class="bg-blue-50 text-blue-700 text-[10px] font-bold px-2 py-0.5 rounded-md">阿蘇草原 ｜ 世界三星認證鮮乳</span>
           <span class="text-xs font-bold text-blue-600">無蛋低敏配方</span>
@@ -942,7 +1022,7 @@
       </div>
 
       <!-- 4. 原次郎左衛門 百年老舖 -->
-      <div class="search-item bg-white rounded-2xl p-4 shadow-sm border border-stone-200">
+      <div class="search-item concrete-card rounded-2xl p-4 shadow-sm">
         <div class="flex justify-between items-start mb-1">
           <span class="bg-emerald-50 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-md">日田豆田町 ｜ 百年釀造老舖</span>
           <span class="text-xs font-bold text-emerald-700">★ 4.6 深度老店</span>
@@ -955,7 +1035,7 @@
       </div>
 
       <!-- 5. 赤司日田羊羹本舖 -->
-      <div class="search-item bg-white rounded-2xl p-4 shadow-sm border border-stone-200">
+      <div class="search-item concrete-card rounded-2xl p-4 shadow-sm">
         <div class="flex justify-between items-start mb-1">
           <span class="bg-amber-50 text-amber-800 text-[10px] font-bold px-2 py-0.5 rounded-md">水鄉日田 ｜ 國賓御用名點</span>
           <span class="text-xs font-bold text-amber-700">明治24年創業</span>
@@ -968,7 +1048,7 @@
       </div>
 
       <!-- 6. 風雅卷 -->
-      <div class="search-item bg-white rounded-2xl p-4 shadow-sm border border-stone-200">
+      <div class="search-item concrete-card rounded-2xl p-4 shadow-sm">
         <div class="flex justify-between items-start mb-1">
           <span class="bg-stone-100 text-stone-700 text-[10px] font-bold px-2 py-0.5 rounded-md">鹹香涮嘴 ｜ 熊本特產</span>
           <span class="text-xs font-bold text-emerald-800">下酒佐茶神物</span>
@@ -981,7 +1061,7 @@
       </div>
 
       <!-- 7. 黑糖甜甜圈棒 -->
-      <div class="search-item bg-white rounded-2xl p-4 shadow-sm border border-stone-200">
+      <div class="search-item concrete-card rounded-2xl p-4 shadow-sm">
         <div class="flex justify-between items-start mb-1">
           <span class="bg-amber-50 text-amber-800 text-[10px] font-bold px-2 py-0.5 rounded-md">國民點心 ｜ 熊本名產</span>
           <span class="text-xs font-bold text-amber-600">回購率極高</span>
