@@ -210,6 +210,18 @@
       *, *::before, *::after { animation-duration:.01ms !important; animation-iteration-count:1 !important; scroll-behavior:auto !important; }
     }
 
+
+    /* 行程打卡互動：安靜、低彩度，不搶走旅遊內容 */
+    .trip-progress-panel { background: rgba(250,248,242,.96); border: 1px solid #e5e0d5; }
+    .trip-progress-track { height: 5px; background: #e7e5df; border-radius: 99px; overflow: hidden; }
+    .trip-progress-fill { height: 100%; width: 0%; background: #64765b; border-radius: 99px; transition: width .35s ease; }
+    .stop-check { border: 1px solid #d6d3cb; color: #78766e; background: #faf9f6; transition: all .18s ease; }
+    .stop-check.is-done { border-color: #66785e; color: #fff; background: #66785e; }
+    .search-item.stop-is-done { border-color: #cbd5c0 !important; background: #fbfcf9; }
+    .search-item.stop-is-done h4 { color: #6f7768; }
+    .stop-check:active { transform: scale(.96); }
+    @media (prefers-reduced-motion: reduce) { .trip-progress-fill, .stop-check { transition: none; } }
+
   </style>
 
 
@@ -1260,6 +1272,7 @@
         btn.classList.remove('active-day-tab');
       });
       document.getElementById('day-tab-' + dayId).classList.add('active-day-tab');
+      if (typeof renderTripProgress === 'function') renderTripProgress(dayId);
 
       window.scrollTo({ top: 120, behavior: 'smooth' });
     }
@@ -1554,6 +1567,93 @@
         isCarRunning = true;
       }
     }
+
+
+    // 行程打卡：狀態保存在這台裝置的瀏覽器，不會上傳
+    const TRIP_CHECK_KEY = 'kyushu_trip_check_v1';
+    function getTripChecks() {
+      try { return JSON.parse(localStorage.getItem(TRIP_CHECK_KEY) || '{}'); }
+      catch (e) { return {}; }
+    }
+    function saveTripChecks(data) {
+      try { localStorage.setItem(TRIP_CHECK_KEY, JSON.stringify(data)); } catch (e) {}
+    }
+    function initTripInteractions() {
+      const dayTabs = document.querySelector('#day-tab-d1')?.parentElement?.parentElement;
+      if (dayTabs && !document.getElementById('tripProgressPanel')) {
+        const panel = document.createElement('section');
+        panel.id = 'tripProgressPanel';
+        panel.className = 'trip-progress-panel rounded-2xl px-4 py-3 shadow-sm';
+        panel.innerHTML = `
+          <div class="flex items-center justify-between gap-3">
+            <div>
+              <div class="text-[10px] tracking-[.16em] font-bold text-stone-400">YOUR TRIP, AT YOUR PACE</div>
+              <div class="mt-1 text-sm font-bold text-stone-800"><span id="tripProgressTitle">今天的旅行進度</span></div>
+            </div>
+            <div class="text-right shrink-0"><span id="tripProgressCount" class="text-lg font-black text-[#64765b]">0/0</span><div class="text-[10px] text-stone-400">個行程已完成</div></div>
+          </div>
+          <div class="trip-progress-track mt-3"><div id="tripProgressFill" class="trip-progress-fill"></div></div>
+          <div class="flex items-center justify-between mt-2 gap-3"><p id="tripProgressHint" class="text-[10px] text-stone-500">走到哪，就打卡到哪。不需要趕進度。</p><button type="button" id="tripResetDay" class="text-[10px] font-semibold text-stone-400 underline underline-offset-2">重設今天</button></div>`;
+        dayTabs.insertAdjacentElement('afterend', panel);
+        document.getElementById('tripResetDay').addEventListener('click', () => {
+          const active = document.querySelector('.day-tab.active-day-tab');
+          const dayId = active?.id?.replace('day-tab-', '') || 'd1';
+          const checks = getTripChecks();
+          document.querySelectorAll(`#day-content-${dayId} .search-item`).forEach((card, i) => delete checks[`${dayId}-${i}`]);
+          saveTripChecks(checks);
+          renderTripProgress(dayId);
+        });
+      }
+      document.querySelectorAll('.day-section').forEach(section => {
+        const dayId = section.id.replace('day-content-', '');
+        section.querySelectorAll('.search-item').forEach((card, i) => {
+          const key = `${dayId}-${i}`;
+          if (card.querySelector('.stop-check')) return;
+          const row = document.createElement('div');
+          row.className = 'flex justify-end mt-3 pt-2 border-t border-stone-100/90';
+          const btn = document.createElement('button');
+          btn.type = 'button'; btn.className = 'stop-check rounded-full px-3 py-1.5 text-[10px] font-bold inline-flex items-center gap-1.5';
+          btn.dataset.stopKey = key;
+          btn.innerHTML = '<span class="check-symbol">○</span><span class="check-label">標記為已完成</span>';
+          btn.setAttribute('aria-pressed', 'false');
+          btn.addEventListener('click', () => {
+            const checks = getTripChecks();
+            checks[key] = !checks[key];
+            saveTripChecks(checks);
+            applyStopState(card, btn, !!checks[key]);
+            renderTripProgress(dayId);
+          });
+          row.appendChild(btn); card.appendChild(row);
+          applyStopState(card, btn, !!getTripChecks()[key]);
+        });
+      });
+      renderTripProgress(document.querySelector('.day-tab.active-day-tab')?.id?.replace('day-tab-', '') || 'd1');
+    }
+    function applyStopState(card, btn, done) {
+      btn.classList.toggle('is-done', done);
+      btn.setAttribute('aria-pressed', String(done));
+      btn.querySelector('.check-symbol').textContent = done ? '✓' : '○';
+      btn.querySelector('.check-label').textContent = done ? '已完成 · 點擊取消' : '標記為已完成';
+      card.classList.toggle('stop-is-done', done);
+    }
+    function renderTripProgress(dayId) {
+      const section = document.getElementById(`day-content-${dayId}`);
+      if (!section) return;
+      const cards = [...section.querySelectorAll('.search-item')];
+      const checks = getTripChecks();
+      const done = cards.filter((_, i) => !!checks[`${dayId}-${i}`]).length;
+      const title = document.querySelector(`#day-tab-${dayId} div:nth-child(2)`)?.textContent?.trim() || dayId.toUpperCase();
+      const count = document.getElementById('tripProgressCount');
+      const fill = document.getElementById('tripProgressFill');
+      const titleEl = document.getElementById('tripProgressTitle');
+      const hint = document.getElementById('tripProgressHint');
+      if (!count || !fill || !titleEl) return;
+      count.textContent = `${done}/${cards.length}`;
+      fill.style.width = `${cards.length ? done / cards.length * 100 : 0}%`;
+      titleEl.textContent = `${dayId.toUpperCase()} · ${title} 的旅行進度`;
+      hint.textContent = done === cards.length && cards.length ? '今天的清單完成了。剩下的時間，留給意外發現。' : done ? '很棒，慢慢來。行程是參考，不是任務。' : '走到哪，就打卡到哪。不需要趕進度。';
+    }
+    document.addEventListener('DOMContentLoaded', initTripInteractions);
 
   </script>
 
