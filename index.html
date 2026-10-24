@@ -303,6 +303,9 @@
       <button onclick="switchMainTab('itinerary')" id="main-tab-itinerary" class="main-tab active-main-tab px-3.5 py-2 rounded-xl text-stone-600 shrink-0 transition flex items-center gap-1.5">
         <span>🗓️</span> 詳細行程
       </button>
+      <button onclick="switchMainTab('map-routes')" id="main-tab-map-routes" class="main-tab px-3.5 py-2 rounded-xl text-stone-600 shrink-0 transition flex items-center gap-1.5">
+        <span>🗺️</span> 路線地圖
+      </button>
       <button onclick="switchMainTab('flight-car')" id="main-tab-flight-car" class="main-tab px-3.5 py-2 rounded-xl text-stone-600 shrink-0 transition flex items-center gap-1.5">
         <span>✈️</span> 航班租車
       </button>
@@ -1235,6 +1238,266 @@
         <div class="mt-3">
           <a href="https://maps.google.com/?q=Fujibambi+Kumamoto+Station" target="_blank" class="bg-sky-50 text-sky-700 text-xs font-bold px-3 py-1.5 rounded-xl transition inline-block">📍 門市地標</a>
         </div>
+      </div>
+
+    </div>
+
+    <!-- ==================== 9. 自駕路線地圖分頁 (新增) ==================== -->
+    <div id="view-map-routes" class="main-view space-y-3.5 hidden">
+      <div class="bg-white border border-stone-200 rounded-2xl p-4 shadow-sm">
+        <div class="flex items-center justify-between">
+          <h4 class="text-xs font-bold text-stone-900 flex items-center gap-1.5">
+            <span>🗺️</span> 6 日自駕巡航路線地圖
+          </h4>
+          <span class="text-[10px] bg-emerald-50 text-emerald-800 font-bold px-2 py-0.5 rounded-md">連貫導航</span>
+        </div>
+        <p class="text-[11px] text-stone-500 mt-1.5 leading-relaxed">
+          點擊下方綠色按鈕即可在手機上<strong>一鍵開啟 Google Maps 完整多點導航</strong>，包含起點、所有景點中繼點與當晚住宿，直接出發免重複輸入！
+        </p>
+      </div>
+
+      <!-- Day 1 路線卡片 -->
+      <div class="concrete-card rounded-2xl p-4 shadow-sm space-y-3">
+        <div class="flex justify-between items-start">
+          <div>
+            <span class="bg-stone-100 text-stone-700 text-[10px] font-mono font-bold px-2 py-0.5 rounded-md">DAY 1 ROUTE</span>
+            <h3 class="text-base font-bold text-stone-900 mt-1">機場落地 ➔ 市區入住 ➔ 城下町散策</h3>
+          </div>
+          <span class="text-[11px] font-bold text-[#354F40]">約 20 km ｜ 40 分</span>
+        </div>
+        
+        <!-- 路線節點可視化 -->
+        <div class="bg-stone-50/80 rounded-xl p-3 border border-stone-100 space-y-1.5 text-xs text-stone-700">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+            <span class="font-bold">起點：阿蘇熊本機場 (KMJ) 門市取車</span>
+          </div>
+          <div class="flex items-center gap-2 pl-3 border-l-2 border-stone-200 ml-1 text-stone-500 text-[11px]">
+            <span>↓ 國道 28 號平緩自駕 35 分</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-sky-500"></span>
+            <span>中繼：THE BLOSSOM 飯店（立體停車場停妥）</span>
+          </div>
+          <div class="flex items-center gap-2 pl-3 border-l-2 border-stone-200 ml-1 text-stone-500 text-[11px]">
+            <span>↓ 市區路面電車 / 散策</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+            <span>加藤神社 ➔ Gluck Coffee ➔ 福雞居酒屋</span>
+          </div>
+        </div>
+
+        <a href="https://www.google.com/maps/dir/?api=1&origin=Aso+Kumamoto+Airport&destination=THE+BLOSSOM+KUMAMOTO&waypoints=Kato+Shrine+Kumamoto%7CGluck+Coffee+Spot+Kumamoto%7CYakitori+Fukudori+Kumamoto&travelmode=driving" target="_blank" class="w-full bg-[#354F40] active:scale-[0.98] text-white text-xs font-bold py-2.5 px-4 rounded-xl shadow-sm flex items-center justify-center gap-2 transition">
+          <span>🚗</span> 開啟 Day 1 Google 地圖完整導航
+        </a>
+      </div>
+
+      <!-- Day 2 路線卡片 -->
+      <div class="concrete-card rounded-2xl p-4 shadow-sm space-y-3">
+        <div class="flex justify-between items-start">
+          <div>
+            <span class="bg-stone-100 text-stone-700 text-[10px] font-mono font-bold px-2 py-0.5 rounded-md">DAY 2 ROUTE</span>
+            <h3 class="text-base font-bold text-stone-900 mt-1">南阿蘇名水 ➔ 上色見 ➔ 高森田樂 ➔ 草千里</h3>
+          </div>
+          <span class="text-[11px] font-bold text-[#354F40]">約 68 km ｜ 2 小時</span>
+        </div>
+        
+        <div class="bg-stone-50/80 rounded-xl p-3 border border-stone-100 space-y-1.5 text-xs text-stone-700">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+            <span class="font-bold">起點：THE BLOSSOM 熊本出發</span>
+          </div>
+          <div class="flex items-center gap-2 pl-3 border-l-2 border-stone-200 ml-1 text-stone-500 text-[11px]">
+            <span>↓ 國道 57 號 ➔ 俵山隧道（45分）</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-sky-500"></span>
+            <span>白川水源 ➔ 上色見熊野座神社</span>
+          </div>
+          <div class="flex items-center gap-2 pl-3 border-l-2 border-stone-200 ml-1 text-stone-500 text-[11px]">
+            <span>↓ 順路車程僅 8 分</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+            <span>午餐：高森田樂保存會（地爐料理）</span>
+          </div>
+          <div class="flex items-center gap-2 pl-3 border-l-2 border-stone-200 ml-1 text-stone-500 text-[11px]">
+            <span>↓ 阿蘇全景景觀公路爬升 30 分</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+            <span>草千里濱（木棧道） ➔ 阿蘇北麓溫泉飯店</span>
+          </div>
+        </div>
+
+        <a href="https://www.google.com/maps/dir/?api=1&origin=THE+BLOSSOM+KUMAMOTO&destination=Aso+Resort+Grandvrio+Hotel&waypoints=Shirakawa+Spring+Kumamoto%7CKamishikimi+Kumanoimasu+Shrine%7CTakamori+Dengaku+Hozonkai%7CKusasenri+Rest+House&travelmode=driving" target="_blank" class="w-full bg-[#354F40] active:scale-[0.98] text-white text-xs font-bold py-2.5 px-4 rounded-xl shadow-sm flex items-center justify-center gap-2 transition">
+          <span>🚗</span> 開啟 Day 2 Google 地圖完整導航
+        </a>
+      </div>
+
+      <!-- Day 3 路線卡片 -->
+      <div class="concrete-card rounded-2xl p-4 shadow-sm space-y-3">
+        <div class="flex justify-between items-start">
+          <div>
+            <span class="bg-stone-100 text-stone-700 text-[10px] font-mono font-bold px-2 py-0.5 rounded-md">DAY 3 ROUTE</span>
+            <h3 class="text-base font-bold text-stone-900 mt-1">牛奶之路 ➔ 大觀峰 ➔ 山波公路 ➔ 黑川溫泉</h3>
+          </div>
+          <span class="text-[11px] font-bold text-[#354F40]">約 52 km ｜ 1.5 小時</span>
+        </div>
+        
+        <div class="bg-stone-50/80 rounded-xl p-3 border border-stone-100 space-y-1.5 text-xs text-stone-700">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+            <span class="font-bold">起點：阿蘇北麓出發</span>
+          </div>
+          <div class="flex items-center gap-2 pl-3 border-l-2 border-stone-200 ml-1 text-stone-500 text-[11px]">
+            <span>↓ 馳騁景觀牛奶之路（Milk Road）25分</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-sky-500"></span>
+            <span>大觀峰展望台（360° 俯瞰涅槃佛）</span>
+          </div>
+          <div class="flex items-center gap-2 pl-3 border-l-2 border-stone-200 ml-1 text-stone-500 text-[11px]">
+            <span>↓ 沿日本最美山波公路（山なみハイウェイ）</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+            <span>牧之戶峠 ➔ 長者原蓼原濕原木棧道</span>
+          </div>
+          <div class="flex items-center gap-2 pl-3 border-l-2 border-stone-200 ml-1 text-stone-500 text-[11px]">
+            <span>↓ 森林山路下坡 25分</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+            <span class="font-bold">終點：黑川溫泉名宿（山河 / 帆山亭 / 奧之湯）</span>
+          </div>
+        </div>
+
+        <a href="https://www.google.com/maps/dir/?api=1&origin=Aso+Resort+Grandvrio+Hotel&destination=Kurokawa+Onsen&waypoints=Daikanbo+Viewpoint%7CChojabaru+Visitor+Center&travelmode=driving" target="_blank" class="w-full bg-[#354F40] active:scale-[0.98] text-white text-xs font-bold py-2.5 px-4 rounded-xl shadow-sm flex items-center justify-center gap-2 transition">
+          <span>🚗</span> 開啟 Day 3 Google 地圖完整導航
+        </a>
+      </div>
+
+      <!-- Day 4 路線卡片 -->
+      <div class="concrete-card rounded-2xl p-4 shadow-sm space-y-3">
+        <div class="flex justify-between items-start">
+          <div>
+            <span class="bg-stone-100 text-stone-700 text-[10px] font-mono font-bold px-2 py-0.5 rounded-md">DAY 4 ROUTE</span>
+            <h3 class="text-base font-bold text-stone-900 mt-1">黑川秘湯 ➔ 戶無蕎麥 ➔ 日田豆田町 ➔ 熊本</h3>
+          </div>
+          <span class="text-[11px] font-bold text-[#354F40]">約 120 km ｜ 2.5 小時</span>
+        </div>
+        
+        <div class="bg-stone-50/80 rounded-xl p-3 border border-stone-100 space-y-1.5 text-xs text-stone-700">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+            <span class="font-bold">起點：黑川溫泉名宿出發</span>
+          </div>
+          <div class="flex items-center gap-2 pl-3 border-l-2 border-stone-200 ml-1 text-stone-500 text-[11px]">
+            <span>↓ 國道 212 號 15分</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-sky-500"></span>
+            <span>午餐：戶無蕎麥處（南小國町手打十割）</span>
+          </div>
+          <div class="flex items-center gap-2 pl-3 border-l-2 border-stone-200 ml-1 text-stone-500 text-[11px]">
+            <span>↓ 經小國町前往水鄉日田（45分）</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+            <span>日田豆田町老街 ➔ 戶山炭火鰻魚飯</span>
+          </div>
+          <div class="flex items-center gap-2 pl-3 border-l-2 border-stone-200 ml-1 text-stone-500 text-[11px]">
+            <span>↓ 日田 IC ➔ 大分道/九州道高速公路（ETC約1.5小時）</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+            <span class="font-bold">終點：THE BLOSSOM 熊本 ➔ 勝烈亭豬排</span>
+          </div>
+        </div>
+
+        <a href="https://www.google.com/maps/dir/?api=1&origin=Kurokawa+Onsen&destination=THE+BLOSSOM+KUMAMOTO&waypoints=Tonashinosobaya+Minamioguni%7CMameda-machi+Hita%7CToyama+Unagi+Hita&travelmode=driving" target="_blank" class="w-full bg-[#354F40] active:scale-[0.98] text-white text-xs font-bold py-2.5 px-4 rounded-xl shadow-sm flex items-center justify-center gap-2 transition">
+          <span>🚗</span> 開啟 Day 4 Google 地圖完整導航
+        </a>
+      </div>
+
+      <!-- Day 5 路線卡片 -->
+      <div class="concrete-card rounded-2xl p-4 shadow-sm space-y-3">
+        <div class="flex justify-between items-start">
+          <div>
+            <span class="bg-stone-100 text-stone-700 text-[10px] font-mono font-bold px-2 py-0.5 rounded-md">DAY 5 ROUTE</span>
+            <h3 class="text-base font-bold text-stone-900 mt-1">熊本市區手沖 ➔ 早午餐 ➔ 購物採買 ➔ 馬肉料理</h3>
+          </div>
+          <span class="text-[11px] font-bold text-[#354F40]">市區散策 ｜ 步行/電車/自駕皆宜</span>
+        </div>
+        
+        <div class="bg-stone-50/80 rounded-xl p-3 border border-stone-100 space-y-1.5 text-xs text-stone-700">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+            <span class="font-bold">晨間 07:30：licht coffeecakes（站前春日門市步行3分）</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-sky-500"></span>
+            <span>早午餐：flour + water 舒芙蕾鬆餅</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+            <span>採買：AMU PLAZA（跑鞋）➔ 下通商圈（動漫藥妝）</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+            <span>下午茶：Coffeedot / Princess Tart 水果派</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-700"></span>
+            <span class="font-bold">晚餐：熊本鄉土料理 青柳（特上馬刺し）</span>
+          </div>
+        </div>
+
+        <a href="https://www.google.com/maps/dir/?api=1&origin=THE+BLOSSOM+KUMAMOTO&destination=Katsuretsutei+Shinshigai+Kumamoto&waypoints=licht+coffeecakes+Kumamoto%7Cflour+water+Kumamoto%7CAMU+PLAZA+KUMAMOTO%7CShimotori+Shopping+Arcade+Kumamoto&travelmode=walking" target="_blank" class="w-full bg-[#354F40] active:scale-[0.98] text-white text-xs font-bold py-2.5 px-4 rounded-xl shadow-sm flex items-center justify-center gap-2 transition">
+          <span>🚶‍♂️</span> 開啟 Day 5 市區完整散策/導航地圖
+        </a>
+      </div>
+
+      <!-- Day 6 路線卡片 -->
+      <div class="concrete-card rounded-2xl p-4 shadow-sm space-y-3">
+        <div class="flex justify-between items-start">
+          <div>
+            <span class="bg-stone-100 text-stone-700 text-[10px] font-mono font-bold px-2 py-0.5 rounded-md">DAY 6 ROUTE</span>
+            <h3 class="text-base font-bold text-stone-900 mt-1">成趣園晨間散步 ➔ 機場加油 ➔ 還車返台</h3>
+          </div>
+          <span class="text-[11px] font-bold text-[#354F40]">約 22 km ｜ 40 分</span>
+        </div>
+        
+        <div class="bg-stone-50/80 rounded-xl p-3 border border-stone-100 space-y-1.5 text-xs text-stone-700">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+            <span class="font-bold">08:00 起點：THE BLOSSOM 熊本退房出發</span>
+          </div>
+          <div class="flex items-center gap-2 pl-3 border-l-2 border-stone-200 ml-1 text-stone-500 text-[11px]">
+            <span>↓ 市區平緩自駕 15 分</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-sky-500"></span>
+            <span>水前寺成趣園 ＆ 出水神社（最終御朱印）</span>
+          </div>
+          <div class="flex items-center gap-2 pl-3 border-l-2 border-stone-200 ml-1 text-stone-500 text-[11px]">
+            <span>↓ 沿縣道 28 號往阿蘇熊本機場（25分）</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+            <span>機場前加油站加滿（Regular 紅色油槍）</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+            <span class="font-bold">10:00 終點：租車門市還車 ➔ 熊本機場 ✈ JX847</span>
+          </div>
+        </div>
+
+        <a href="https://www.google.com/maps/dir/?api=1&origin=THE+BLOSSOM+KUMAMOTO&destination=Aso+Kumamoto+Airport&waypoints=Suizenji+Jojuen+Garden&travelmode=driving" target="_blank" class="w-full bg-[#354F40] active:scale-[0.98] text-white text-xs font-bold py-2.5 px-4 rounded-xl shadow-sm flex items-center justify-center gap-2 transition">
+          <span>🚗</span> 開啟 Day 6 還車返台 Google 地圖導航
+        </a>
       </div>
 
     </div>
