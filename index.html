@@ -6,7 +6,7 @@
   <title>2027 九州慢活自駕 ｜ 熊本・阿蘇・黑川</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="theme-color" content="#0284C7">
+  <meta name="theme-color" content="#354B40">
   <meta name="robots" content="noindex, nofollow">
   
   <!-- Tailwind CSS CDN -->
@@ -109,6 +109,107 @@
     .concrete-card:active {
       transform: scale(0.99);
     }
+
+    /* Editorial travel-journal art direction */
+    :root {
+      --concrete-bg: #F2F0E9;
+      --slate-dark: #242B27;
+      --pine-forest: #354F40;
+      --mist-ocean: #667A78;
+      --accent-clay: #B86E50;
+    }
+    body { background: #F2F0E9; color: #292F2A; }
+    #stageHeader {
+      background: linear-gradient(145deg, #26362F 0%, #354B40 58%, #596B5D 100%) !important;
+      border-radius: 0 0 28px 28px;
+      box-shadow: 0 12px 32px rgba(37,49,41,.12);
+    }
+    #stageHeader h1 { letter-spacing: -.045em; font-weight: 750; }
+    #stageHeader .pulse-beacon { animation-duration: 3.8s; }
+    .kyushu-scene {
+      isolation: isolate;
+      background: #C9D0C5;
+      border: 1px solid rgba(255,255,255,.2);
+      box-shadow: inset 0 1px rgba(255,255,255,.25);
+    }
+    .scene-sky {
+      background: linear-gradient(180deg,#C4D0C9 0%,#E0DCCB 72%,#B9C3B2 100%);
+    }
+    .scene-sun {
+      width: 42px; height: 42px; right: 17%; top: 17%;
+      background: #E9D8AF; opacity: .9;
+      box-shadow: 0 0 34px rgba(233,216,175,.28);
+    }
+    .scene-cloud {
+      width: 82px; height: 15px; border-radius: 100px;
+      background: rgba(248,246,232,.45); filter: blur(5px);
+      animation: softCloudDrift 34s ease-in-out infinite alternate;
+    }
+    .scene-cloud-a { left: 28%; top: 24%; }
+    .scene-cloud-b { left: 66%; top: 39%; width: 58px; opacity:.7; animation-duration: 46s; animation-delay: -12s; }
+    .scene-ridge { height: 72%; }
+    .scene-ridge-back { opacity: .8; animation: ridgeDrift 24s ease-in-out infinite alternate; }
+    .scene-ridge-front { height: 47%; animation: ridgeDrift 31s ease-in-out infinite alternate-reverse; }
+    .scene-road {
+      height: 31px;
+      background: linear-gradient(180deg,#626A61 0%,#424B43 100%);
+      border-top: 1px solid rgba(244,236,210,.55);
+    }
+    .scene-road-edge { height: 1px; background: rgba(246,236,205,.6); }
+    .scene-road-dashes {
+      height: 2px;
+      background: repeating-linear-gradient(90deg,transparent 0 28px,#E8D7A5 28px 43px,transparent 43px 69px);
+      opacity: .82;
+      animation: roadGlide 2.8s linear infinite;
+    }
+    .scene-car {
+      width: 112px; bottom: 8px; left: 50%;
+      transform: translateX(-50%);
+      z-index: 4;
+      filter: drop-shadow(0 5px 4px rgba(29,39,32,.2));
+      animation: gentleDrive 4.6s ease-in-out infinite;
+    }
+    .scene-car svg { display:block; width:100%; overflow:visible; }
+    .scene-caption {
+      z-index: 5; display:flex; flex-direction:column; gap:3px;
+      color:#34463B; font-size:9px; font-weight:800; letter-spacing:.14em;
+      text-shadow:0 1px rgba(255,255,255,.25);
+    }
+    .scene-caption-sub { font-size:6px; font-weight:600; letter-spacing:.12em; opacity:.78; }
+    .scene-grain {
+      z-index:6; opacity:.12;
+      background-image: radial-gradient(rgba(40,50,41,.3) .55px, transparent .7px);
+      background-size: 4px 4px; mix-blend-mode:multiply;
+    }
+    @keyframes softCloudDrift { from { transform:translateX(-8px); } to { transform:translateX(18px); } }
+    @keyframes ridgeDrift { from { transform:translateX(-5px); } to { transform:translateX(5px); } }
+    @keyframes roadGlide { from { background-position:0 0; } to { background-position:-69px 0; } }
+    @keyframes gentleDrive {
+      0%,100% { transform:translate(-50%,0) rotate(-.4deg); }
+      50% { transform:translate(-50%,-2px) rotate(.4deg); }
+    }
+    .concrete-card {
+      border-color: #E3DED3;
+      border-radius: 18px;
+      box-shadow: 0 2px 8px rgba(45,49,39,.025);
+      transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+    }
+    .concrete-card:active { transform: scale(.992); }
+    .active-main-tab {
+      background:#29352E !important;
+      box-shadow:none !important;
+    }
+    .active-day-tab {
+      background:#405D49 !important; border-color:#405D49 !important;
+      box-shadow:none !important;
+    }
+    #searchInput:focus { border-color:#879985; box-shadow:0 0 0 3px rgba(95,120,94,.1); }
+    a, button { -webkit-tap-highlight-color: transparent; }
+    button { transition: background-color .2s ease, transform .2s ease, opacity .2s ease; }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration:.01ms !important; animation-iteration-count:1 !important; scroll-behavior:auto !important; }
+    }
+
   </style>
 
 
@@ -137,77 +238,41 @@
       </button>
     </div>
 
-    <!-- 動態視窗：天空白雲 ➔ 阿蘇遠山 ➔ 前進自駕車 ➔ 飛馳公路 -->
-    <div class="relative w-full h-24 rounded-2xl bg-gradient-to-b from-[#182329]/90 to-[#1F3128] overflow-hidden border border-white/10 shadow-inner">
-      
-      <!-- 飄浮白雲 1 -->
-      <div class="absolute top-2 w-12 h-4 bg-white/20 rounded-full blur-[1px] animate-cloud-1 pointer-events-none"></div>
-      <!-- 飄浮白雲 2 -->
-      <div class="absolute top-5 w-16 h-5 bg-white/15 rounded-full blur-[1px] animate-cloud-2 pointer-events-none"></div>
-
-      <!-- 阿蘇五岳背景剪影 (固定群山) -->
-      <svg class="absolute bottom-6 w-full h-14 text-[#141E24] fill-current opacity-80" viewBox="0 0 400 60" preserveAspectRatio="none">
-        <path d="M0,60 L0,30 Q40,10 90,25 T190,15 Q240,5 290,28 T400,20 L400,60 Z"></path>
+    <!-- 阿蘇山景動態插畫：低彩度、慢速視差 -->
+    <div class="kyushu-scene relative w-full h-36 sm:h-40 rounded-2xl overflow-hidden" aria-label="阿蘇山景與自駕車插畫">
+      <div class="scene-sky absolute inset-0"></div>
+      <div class="scene-sun absolute rounded-full"></div>
+      <div class="scene-cloud scene-cloud-a absolute"> </div>
+      <div class="scene-cloud scene-cloud-b absolute"> </div>
+      <svg class="scene-ridge scene-ridge-back absolute inset-x-0 bottom-7 w-full" viewBox="0 0 800 150" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0 150V92L55 70 105 82 165 42 225 75 286 22 346 65 410 46 470 78 532 34 594 70 654 52 715 83 800 56V150Z" fill="#8D9A88"/>
+        <path d="M0 150V115L75 95 145 108 215 83 282 105 350 76 422 106 500 83 575 109 650 91 730 108 800 89V150Z" fill="#64796A"/>
       </svg>
-      <!-- 近景阿蘇外輪山墨綠剪影 -->
-      <svg class="absolute bottom-6 w-full h-10 text-[#1B2B23] fill-current opacity-90" viewBox="0 0 400 40" preserveAspectRatio="none">
-        <path d="M0,40 L0,20 Q60,5 140,18 T280,10 Q340,5 400,22 L400,40 Z"></path>
+      <svg class="scene-ridge scene-ridge-front absolute inset-x-0 bottom-5 w-full" viewBox="0 0 800 100" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0 100V62Q70 25 150 56T300 49T455 58T610 42T800 55V100Z" fill="#354F40"/>
       </svg>
-
-      <!-- 飛馳的自駕公路 (柏油路面與快速向後流動的虛線) -->
-      <div class="absolute bottom-0 left-0 right-0 h-6 bg-[#2B3539] border-t-2 border-[#3D4C52] flex items-center overflow-hidden">
-        <div class="flex space-x-6 whitespace-nowrap animate-road w-[200%]">
-          <!-- 重複的白虛線 -->
-          <span class="inline-block w-8 h-1 bg-yellow-400/80 rounded-full shrink-0"></span>
-          <span class="inline-block w-8 h-1 bg-yellow-400/80 rounded-full shrink-0"></span>
-          <span class="inline-block w-8 h-1 bg-yellow-400/80 rounded-full shrink-0"></span>
-          <span class="inline-block w-8 h-1 bg-yellow-400/80 rounded-full shrink-0"></span>
-          <span class="inline-block w-8 h-1 bg-yellow-400/80 rounded-full shrink-0"></span>
-          <span class="inline-block w-8 h-1 bg-yellow-400/80 rounded-full shrink-0"></span>
-          <span class="inline-block w-8 h-1 bg-yellow-400/80 rounded-full shrink-0"></span>
-          <span class="inline-block w-8 h-1 bg-yellow-400/80 rounded-full shrink-0"></span>
-          <span class="inline-block w-8 h-1 bg-yellow-400/80 rounded-full shrink-0"></span>
-          <span class="inline-block w-8 h-1 bg-yellow-400/80 rounded-full shrink-0"></span>
-        </div>
+      <div class="scene-road absolute inset-x-0 bottom-0"></div>
+      <div class="scene-road-edge absolute inset-x-0 bottom-7"></div>
+      <div class="scene-road-dashes absolute bottom-3 inset-x-0"></div>
+      <div class="scene-car absolute" aria-hidden="true">
+        <svg viewBox="0 0 180 82" role="img">
+          <ellipse cx="90" cy="69" rx="67" ry="7" fill="#18221D" opacity=".28"/>
+          <path d="M25 53 34 34Q39 27 53 25L72 11Q78 7 91 8L119 12Q130 15 141 34L155 40Q163 44 163 55L157 62H23L20 58Q20 54 25 53Z" fill="#C9C7B4" stroke="#3B493F" stroke-width="2"/>
+          <path d="M57 28 75 14Q79 12 88 13L112 16Q121 18 130 32Z" fill="#526D70"/>
+          <path d="M52 30H130L137 37H43Z" fill="#789091"/>
+          <path d="M26 48 39 44H147L158 49V57H24Z" fill="#D8D4C4"/>
+          <path d="M25 48 37 45H47V55H24Z" fill="#B45F43"/>
+          <rect x="149" y="45" width="9" height="5" rx="2" fill="#F1D9A3"/>
+          <rect x="72" y="59" width="42" height="3" rx="1.5" fill="#7C8174"/>
+          <circle cx="52" cy="60" r="13" fill="#26302C"/><circle cx="52" cy="60" r="6" fill="#C7C9BE"/><circle cx="52" cy="60" r="2" fill="#59655C"/>
+          <circle cx="137" cy="60" r="13" fill="#26302C"/><circle cx="137" cy="60" r="6" fill="#C7C9BE"/><circle cx="137" cy="60" r="2" fill="#59655C"/>
+        </svg>
       </div>
-
-      <!-- 自駕 Compact 掀背車主體 (微幅顛簸 + 輪胎旋轉) -->
-      <div class="absolute bottom-3 left-1/2 -translate-x-1/2 animate-car z-10">
-        <div class="relative w-28 h-12">
-          
-          <!-- 車頂行李箱 -->
-          <div class="absolute -top-1 left-7 w-12 h-2.5 bg-[#4A5D55] rounded-full border border-stone-700 shadow-sm flex items-center justify-center">
-            <span class="text-[7px] text-white/80 font-mono tracking-tighter">THULE</span>
-          </div>
-          <!-- 行李架支架 -->
-          <div class="absolute top-1 left-9 w-1.5 h-1 bg-stone-700"></div>
-          <div class="absolute top-1 left-16 w-1.5 h-1 bg-stone-700"></div>
-
-          <!-- 俐落掀背車身 (冷杉墨綠) -->
-          <svg class="w-28 h-10 drop-shadow-md" viewBox="0 0 112 40" fill="none">
-            <!-- 車體金屬外殼 -->
-            <path d="M10,28 L18,14 Q22,8 32,8 L68,8 Q78,8 86,15 L98,20 Q106,24 106,28 L104,32 L6,32 Q6,28 10,28 Z" fill="#2E4A3E" stroke="#1C2D26" stroke-width="1.5"/>
-            <!-- 擋風車窗 -->
-            <path d="M33,10 L65,10 Q73,10 79,16 L88,19 L30,19 Q26,14 33,10 Z" fill="#93C5FD" opacity="0.85"/>
-            <!-- 後車窗 -->
-            <path d="M22,16 L27,19 L16,19 Q16,17 22,16 Z" fill="#93C5FD" opacity="0.6"/>
-            <!-- 車頭燈與車尾燈 -->
-            <circle cx="103" cy="24" r="2.5" fill="#FEF08A"/>
-            <rect x="7" y="22" width="3" height="4" rx="1" fill="#EF4444"/>
-          </svg>
-
-          <!-- 前車輪 (旋轉動態) -->
-          <div class="absolute bottom-[-1px] right-4 w-5 h-5 rounded-full bg-stone-900 border-2 border-stone-600 animate-wheel flex items-center justify-center">
-            <div class="w-2 h-2 rounded-full bg-stone-300"></div>
-          </div>
-          <!-- 後車輪 (旋轉動態) -->
-          <div class="absolute bottom-[-1px] left-4 w-5 h-5 rounded-full bg-stone-900 border-2 border-stone-600 animate-wheel flex items-center justify-center">
-            <div class="w-2 h-2 rounded-full bg-stone-300"></div>
-          </div>
-
-        </div>
+      <div class="scene-caption absolute left-3 top-3">
+        <span>阿蘇・MILK ROAD</span>
+        <span class="scene-caption-sub">A SLOW DRIVE THROUGH THE HIGHLANDS</span>
       </div>
-
+      <div class="scene-grain absolute inset-0 pointer-events-none"></div>
     </div>
 
     <!-- 底部自駕地點即時動線標語 -->
